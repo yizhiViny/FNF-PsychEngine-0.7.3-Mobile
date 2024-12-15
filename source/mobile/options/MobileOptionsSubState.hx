@@ -30,7 +30,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 {
 	#if android
 	var storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL"];
-	var externalPaths:Array<String> = StorageUtil.checkExternalPaths(true);
+	var externalPaths:Array<String> = SUtil.checkExternalPaths(true);
 	final lastStorageType:String = ClientPrefs.data.storageType;
 	#end
 	var exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
@@ -77,7 +77,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		addOption(option);
 
 		#if android
-		option = new Option('Storage Type', 'Which folder Psych Engine should use?\n(CHANGING THIS MAKES DELETE YOUR OLD FOLDER!!)', 'storageType', STRING,
+		option = new Option('Storage Type', 'Which folder Psych Engine should use?\n(CHANGING THIS MAKES DELETE YOUR OLD FOLDER!!)', 'storageType', 'string',
 			storageTypes);
 		addOption(option);
 		#end
