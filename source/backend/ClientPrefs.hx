@@ -13,6 +13,9 @@ import states.TitleState;
 	public var dynamicColors:Bool = true; // yes cause its cool -Karim
 	public var controlsAlpha:Float = #if (mobile || mobileC) 0.6 #else 0.001 #end;
 	public var screensaver:Bool = false;
+	#if android
+	public var storageType:String = "EXTERNAL_DATA";
+	#end
         public var hideHitboxHints:Bool = false;
         // end of Mobile Controls Releated
 	public var popUpRating:Bool = true;
