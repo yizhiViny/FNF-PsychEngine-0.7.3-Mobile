@@ -7,7 +7,6 @@ permissions:
 
 env:
   PROJECT_NAME: PsychEngine
-  REPO_PATH: MobilePorting/FNF-PsychEngine-0.7.3-Mobile
 
 jobs:
   build:
