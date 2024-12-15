@@ -28,11 +28,19 @@ import llua.Lua;
 import lime.ui.Haptic;
 import psychlua.FunkinLua;
 import mobile.backend.TouchFunctions;
+#if android
+import mobile.backend.PsychJNI;
+// import android.os.BatteryManager;
+import android.widget.Toast;
+import android.Tools;
+#end
 
 class MobileFunctions
 {
 	public static function implement(funk:FunkinLua)
 	{
+		funk.set('mobileC', Controls.instance.mobileC);
+
 		funk.set('mobileControlsMode', getMobileControlsAsString());
 
 		funk.set("extraButtonPressed", function(button:String)
@@ -208,15 +216,24 @@ class MobileFunctions
 			case 5:
 				return 'none';
 		}
-		return 'uknown';
+		return 'unknown';
 	}
 }
 
 #if android
 class AndroidFunctions
 {
+	// static var spicyPillow:BatteryManager = new BatteryManager();
 	public static function implement(funk:FunkinLua)
 	{
+		// funk.set("isRooted", Tools.isRooted());
+		funk.set("isDolbyAtmos", Tools.isDolbyAtmos());
+		funk.set("isAndroidTV", Tools.isAndroidTV());
+		funk.set("isTablet", Tools.isTablet());
+		funk.set("isChromebook", Tools.isChromebook());
+		funk.set("isDeXMode", Tools.isDeXMode());
+		// funk.set("isCharging", spicyPillow.isCharging());
+
 		funk.set("backJustPressed", FlxG.android.justPressed.BACK);
 		funk.set("backPressed", FlxG.android.pressed.BACK);
 		funk.set("backJustReleased", FlxG.android.justReleased.BACK);
@@ -224,6 +241,64 @@ class AndroidFunctions
 		funk.set("menuJustPressed", FlxG.android.justPressed.MENU);
 		funk.set("menuPressed", FlxG.android.pressed.MENU);
 		funk.set("menuJustReleased", FlxG.android.justReleased.MENU);
+
+		funk.set("getCurrentOrientation", () -> PsychJNI.getCurrentOrientationAsString());
+		funk.set("setOrientation", function(?hint:String):Void
+		{
+			switch (hint.toLowerCase())
+			{
+				case 'portrait':
+					hint = 'Portrait';
+				case 'portraitupsidedown' | 'upsidedownportrait' | 'upsidedown':
+					hint = 'PortraitUpsideDown';
+				case 'landscapeleft' | 'leftlandscape':
+					hint = 'LandscapeLeft';
+				case 'landscaperight' | 'rightlandscape' | 'landscape':
+					hint = 'LandscapeRight';
+				default:
+					hint = null;
+			}
+			if (hint == null)
+				return FunkinLua.luaTrace('setOrientation: No orientation specified.');
+			PsychJNI.setOrientation(FlxG.stage.stageWidth, FlxG.stage.stageHeight, false, hint);
+		});
+
+		funk.set("minimizeWindow", () -> Tools.minimizeWindow());
+
+		funk.set("showToast", function(text:String, ?duration:Int, ?xOffset:Int, ?yOffset:Int) /* , ?gravity:Int*/
+		{
+			if (text == null)
+				return FunkinLua.luaTrace('showToast: No text specified.');
+			else if (duration == null)
+				return FunkinLua.luaTrace('showToast: No duration specified.');
+
+			if (xOffset == null)
+				xOffset = 0;
+			if (yOffset == null)
+				yOffset = 0;
+
+			Toast.makeText(text, duration, -1, xOffset, yOffset);
+		});
+
+		funk.set("isScreenKeyboardShown", () -> PsychJNI.isScreenKeyboardShown());
+
+		funk.set("clipboardHasText", () -> PsychJNI.clipboardHasText());
+		funk.set("clipboardGetText", () -> PsychJNI.clipboardGetText());
+		funk.set("clipboardSetText", function(?text:String):Void
+		{
+			if (text != null)
+				return FunkinLua.luaTrace('clipboardSetText: No text specified.');
+			PsychJNI.clipboardSetText(text);
+		});
+
+		funk.set("manualBackButton", () -> PsychJNI.manualBackButton());
+
+		funk.set("setActivityTitle", function(text:String):Void
+		{
+			if (text != null)
+				return FunkinLua.luaTrace('setActivityTitle: No text specified.');
+			PsychJNI.setActivityTitle(text);
+		});
 	}
 }
 #end
