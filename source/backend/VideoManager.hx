@@ -42,9 +42,9 @@ class VideoManager extends Video {
     }
 
     public function startVideo(path:String, #if hxCodec loop:Bool = false #elseif hxvlc loops:Int = 0, ?options:Array<String> #end) {
-        #if (hxCodec >= "3.0.0"  && hxCodec)
+        #if (hxCodec >= "3.0.0" && hxCodec)
         play(path, loop);
-        #elseif (hxCodec < "3.0.0"  && hxCodec)
+        #elseif (hxCodec < "3.0.0" && hxCodec)
         playVideo(path, loop, false);
         #elseif hxvlc
         load(path, loops, options);

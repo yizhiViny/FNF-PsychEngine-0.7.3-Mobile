@@ -69,7 +69,7 @@
       "name": "linc_luajit",
       "type": "git",
       "dir": null,
-      "ref": "f78d738375fd8992890fc615a5849302466f7d72",
+      "ref": "3612641af3cebf2fdf7988a1ccde709a4655a377",
       "url": "https://github.com/mcagabe19-stuff/linc_luajit-spiced"
     },
     {
@@ -81,8 +81,10 @@
     },
     {
       "name": "extension-androidtools",
-      "type": "haxelib",
-      "version": "2.1.1"
+      "type": "git",
+      "dir": null,
+      "ref": "8c1304bbac73d9ff6269cef0979a8e04493b3f3e",
+      "url": "https://github.com/MAJigsaw77/extension-androidtools"
     }
   ]
 }
