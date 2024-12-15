@@ -4,6 +4,8 @@ package mobile.backend;
 import android.content.Context;
 import android.widget.Toast;
 import android.os.Environment;
+import android.Settings;
+import android.os.Build;
 import android.Permissions;
 import lime.app.Application;
 #end
@@ -176,21 +178,44 @@ class SUtil
 	#if android
 	public static function doPermissionsShit():Void
 	{
-		if (!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE) || !Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE))
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+			Permissions.requestPermissions(['READ_MEDIA_IMAGES', 'READ_MEDIA_VIDEO', 'READ_MEDIA_AUDIO']);
+		else
+			Permissions.requestPermissions(['READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE']);
+
+		if (!Environment.isExternalStorageManager())
 		{
-			if (!Permissions.getGrantedPermissions().contains(Permissions.READ_EXTERNAL_STORAGE)) Permissions.requestPermission(Permissions.READ_EXTERNAL_STORAGE);
-			if (!Permissions.getGrantedPermissions().contains(Permissions.WRITE_EXTERNAL_STORAGE)) Permissions.requestPermission(Permissions.WRITE_EXTERNAL_STORAGE);
-			showPopUp('Please Make Sure You Accepted The Permissions To Be Able To Run The Game', 'Notice!');
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+				Settings.requestSetting('REQUEST_MANAGE_MEDIA');
+			Settings.requestSetting('MANAGE_APP_ALL_FILES_ACCESS_PERMISSION');
+		}
+
+		if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+			&& !Permissions.getGrantedPermissions().contains('android.permission.READ_MEDIA_IMAGES'))
+			|| (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+				&& !Permissions.getGrantedPermissions().contains('android.permission.READ_EXTERNAL_STORAGE')))
+			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress OK to see what happens',
+				'Notice!');
+
+		try
+		{
+			if (!FileSystem.exists(StorageUtil.getStorageDirectory()))
+				FileSystem.createDirectory(StorageUtil.getStorageDirectory());
+		}
+		catch (e:Dynamic)
+		{
+			showPopUp('Please create directory to\n' + StorageUtil.getStorageDirectory(true) + '\nPress OK to close the game', 'Error!');
+			LimeSystem.exit(1);
 		}
 	}
 	#end
 
 	public static function showPopUp(message:String, title:String):Void
 	{
-		#if (windows || android || js || wasm)
-		Lib.application.window.alert(message, title);
+		#if android
+		android.Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);
 		#else
-		LimeLogger.println('$title - $message');
+		FlxG.stage.window.alert(message, title);
 		#end
 	}
 }
