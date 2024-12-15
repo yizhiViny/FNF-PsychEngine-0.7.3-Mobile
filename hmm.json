@@ -69,8 +69,8 @@
       "name": "linc_luajit",
       "type": "git",
       "dir": null,
-      "ref": "5a5e055f754f9d6a1a4768019e062e2eed866e3e",
-      "url": "https://github.com/mcagabe19-stuff/linc_luajit-spiced"
+      "ref": "1e6682038e8c7e5aacd30d107cc59a9e6044ff84",
+      "url": "https://github.com/mcagabe19-stuff/linc_luajit-spiced2"
     },
     {
       "name": "flxanimate",
