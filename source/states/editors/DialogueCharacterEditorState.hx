@@ -762,7 +762,7 @@ class DialogueCharacterEditorState extends MusicBeatState
 			var characterName:String = splittedImage[0].toLowerCase().replace(' ', '');
 
 			#if mobile
-			StorageUtil.saveContent(characterName, ".json", data);
+			StorageUtil.saveContent('$characterName.json', data);
 			#else
 			_file = new FileReference();
 			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);

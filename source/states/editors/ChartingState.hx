@@ -3225,7 +3225,7 @@ class ChartingState extends MusicBeatState
 		if ((data != null) && (data.length > 0))
 		{
 			#if mobile
-			StorageUtil.saveContent(Paths.formatToSongPath(_song.song), ".json", data.trim());
+			StorageUtil.saveContent('${Paths.formatToSongPath(_song.song)}.json', data.trim());
 			#else
 			_file = new FileReference();
 			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);
@@ -3256,7 +3256,7 @@ class ChartingState extends MusicBeatState
 		if ((data != null) && (data.length > 0))
 		{
 			#if mobile
-			StorageUtil.saveContent("events", ".json", data.trim());
+			StorageUtil.saveContent("events.json", data.trim());
 			#else
 			_file = new FileReference();
 			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);

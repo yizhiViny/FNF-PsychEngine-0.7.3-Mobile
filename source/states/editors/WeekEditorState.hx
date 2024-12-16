@@ -526,7 +526,7 @@ class WeekEditorState extends MusicBeatState
 		if (data.length > 0)
 		{
 			#if mobile
-			StorageUtil.saveContent(weekFileName, ".json", data);
+			StorageUtil.saveContent('$weekFileName.json', data);
 			#else
 			_file = new FileReference();
 			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);
