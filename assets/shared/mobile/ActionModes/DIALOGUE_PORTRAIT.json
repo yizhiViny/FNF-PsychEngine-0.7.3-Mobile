@@ -5,8 +5,6 @@
       "graphic": "x",
       "x": 908,
       "y": 0,
-      "width": 132,
-      "height": 125,
       "color": "0x99062D"
     },
     {
@@ -14,8 +12,6 @@
       "graphic": "y",
       "x": 1032,
       "y": 0,
-      "width": 132,
-      "height": 125,
       "color": "0x4A35B9"
     },
     {
@@ -23,8 +19,6 @@
       "graphic": "b",
       "x": 1032,
       "y": 125,
-      "width": 132,
-      "height": 125,
       "color": "0xFFCB00"
     },
     {
@@ -32,8 +26,6 @@
       "graphic": "z",
       "x": 1156,
       "y": 0,
-      "width": 132,
-      "height": 125,
       "color": "0xCCB98E"
     },
     {
@@ -41,8 +33,6 @@
       "graphic": "a",
       "x": 1156,
       "y": 125,
-      "width": 132,
-      "height": 125,
       "color": "0xFF0000"
     }
   ]
