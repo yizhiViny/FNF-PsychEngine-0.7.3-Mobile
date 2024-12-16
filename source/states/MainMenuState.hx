@@ -108,7 +108,7 @@ class MainMenuState extends MusicBeatState
 		#end
 		#end
 
-		addVirtualPad(UP_DOWN, A_B_E);
+		addTouchPad("UP_DOWN", "A_B_E");
 
 		super.create();
 
@@ -202,7 +202,7 @@ class MainMenuState extends MusicBeatState
 					}
 				}
 			}
-			else if (controls.justPressed('debug_1') || virtualPad.buttonE.justPressed)
+			else if (controls.justPressed('debug_1') || touchPad.buttonE.justPressed)
 			{
 				selectedSomethin = true;
 				MusicBeatState.switchState(new MasterEditorMenu());

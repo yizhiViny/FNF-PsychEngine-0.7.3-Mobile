@@ -208,7 +208,7 @@ class PlayState extends MusicBeatState
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
-	public var luaVpadCam:FlxCamera;
+	public var luaTpadCam:FlxCamera;
 	public var cameraSpeed:Float = 1;
 
 	public var songScore:Int = 0;
@@ -268,7 +268,7 @@ class PlayState extends MusicBeatState
 
 	#if VIDEOS_ALLOWED public var videoSprites:Array<VideoSpriteManager> = []; #end
 
-	public var luaVirtualPad:FlxVirtualPad;
+	public var luaTouchPad:TouchPad;
 
 	override public function create()
 	{
@@ -306,13 +306,13 @@ class PlayState extends MusicBeatState
 		camGame = initPsychCamera();
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
-		luaVpadCam = new FlxCamera();
+		luaTpadCam = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
-		luaVpadCam.bgColor.alpha = 0;
+		luaTpadCam.bgColor.alpha = 0;
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
-		FlxG.cameras.add(luaVpadCam, false);
+		FlxG.cameras.add(luaTpadCam, false);
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		persistentUpdate = true;
@@ -416,7 +416,7 @@ class PlayState extends MusicBeatState
 		// "GLOBAL" SCRIPTS
 		#if ((LUA_ALLOWED || HSCRIPT_ALLOWED) && sys)
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'scripts/'))
-			for (file in FileSystem.readDirectory(folder))
+			for (file in Paths.readDirectory(folder))
 			{
 				#if LUA_ALLOWED
 				if(file.toLowerCase().endsWith('.lua'))
@@ -607,7 +607,7 @@ class PlayState extends MusicBeatState
 		// SONG SPECIFIC SCRIPTS
 		#if ((LUA_ALLOWED || HSCRIPT_ALLOWED) && sys)
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'data/$songName/'))
-			for (file in FileSystem.readDirectory(folder))
+			for (file in Paths.readDirectory(folder))
 			{
 				#if LUA_ALLOWED
 				if(file.toLowerCase().endsWith('.lua'))
@@ -621,7 +621,7 @@ class PlayState extends MusicBeatState
 			}
 		#end
 
-		addMobileControls(false);
+		addMobileControls();
 
 		startCallback();
 		RecalculateRating();
@@ -647,8 +647,8 @@ class PlayState extends MusicBeatState
 		cachePopUpScore();
 
 		#if (!android)
-		addVirtualPad(NONE, P);
-    	addVirtualPadCamera(false);
+		addTouchPad("NONE", "P");
+    	addTouchPadCamera();
 		#end
 
 		super.create();
@@ -942,7 +942,7 @@ class PlayState extends MusicBeatState
 
 	public function startCountdown()
 	{
-		mobileControls.visible = true;
+		mobileControls.instance.visible = true;
 		if(startedCountdown) {
 			callOnScripts('onStartCountdown');
 			return false;
@@ -1659,7 +1659,6 @@ class PlayState extends MusicBeatState
 			#end
 
 			paused = false;
-			mobileControls.visible = #if !android virtualPad.visible = #end true;
 			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 		}
@@ -1751,7 +1750,7 @@ class PlayState extends MusicBeatState
 			botplayTxt.alpha = 1 - Math.sin((Math.PI * botplaySine) / 180);
 		}
 
-		if ((controls.PAUSE #if android || FlxG.android.justReleased.BACK #else || virtualPad.buttonP.justPressed #end) && (startedCountdown && canPause))
+		if ((controls.PAUSE #if android || FlxG.android.justReleased.BACK #else || touchPad.buttonP.justPressed #end) && (startedCountdown && canPause))
 		{
 			var ret:Dynamic = callOnScripts('onPause', null, true);
 			if(ret != LuaUtils.Function_Stop) {
@@ -1958,7 +1957,6 @@ class PlayState extends MusicBeatState
 		FlxG.camera.followLerp = 0;
 		persistentUpdate = false;
 		persistentDraw = true;
-		mobileControls.visible = #if !android virtualPad.visible = #end false;
 		paused = true;
 
 		#if VIDEOS_ALLOWED
@@ -2407,7 +2405,7 @@ class PlayState extends MusicBeatState
 	public var transitioning = false;
 	public function endSong()
 	{
-		mobileControls.visible = #if !android virtualPad.visible = #end false;
+		mobileControls.instance.visible = #if !android touchPad.visible = #end false;
 		//Should kill you if you tried to cheat
 		if(!startingSong) {
 			notes.forEach(function(daNote:Note) {
@@ -3693,79 +3691,95 @@ class PlayState extends MusicBeatState
 	}
 	#end
 
-	public function makeLuaVirtualPad(DPadMode:String, ActionMode:String) {
-		if(members.contains(luaVirtualPad)) return;
+	public function makeLuaTouchPad(DPadMode:String, ActionMode:String) {
+		if(members.contains(luaTouchPad)) return;
 
-		if(!variables.exists("luaVirtualPad"))
-			variables.set("luaVirtualPad", luaVirtualPad);
+		if(!variables.exists("luaTouchPad"))
+			variables.set("luaTouchPad", luaTouchPad);
 
-		luaVirtualPad = new FlxVirtualPad(Data.dpadMode.get(DPadMode), Data.actionMode.get(ActionMode), NONE);
-		luaVirtualPad.alpha = ClientPrefs.data.controlsAlpha;
+		luaTouchPad = new TouchPad(DPadMode, ActionMode, NONE);
+		luaTouchPad.alpha = ClientPrefs.data.controlsAlpha;
 	}
 	
-	public function addLuaVirtualPad() {
-		if(luaVirtualPad == null || members.contains(luaVirtualPad)) return;
+	public function addLuaTouchPad() {
+		if(luaTouchPad == null || members.contains(luaTouchPad)) return;
 
 		var target = LuaUtils.getTargetInstance();
-		target.insert(target.members.length + 1, luaVirtualPad);
+		target.insert(target.members.length + 1, luaTouchPad);
 	}
 
-	public function addLuaVirtualPadCamera() {
-		if(luaVirtualPad != null)
-			luaVirtualPad.cameras = [luaVpadCam];
+	public function addLuaTouchPadCamera() {
+		if(luaTouchPad != null)
+			luaTouchPad.cameras = [luaTpadCam];
 	}
 
-	public function removeLuaVirtualPad() {
-		if (luaVirtualPad != null) {
-			luaVirtualPad.kill();
-			luaVirtualPad.destroy();
-			remove(luaVirtualPad);
-			luaVirtualPad = null;
+	public function removeLuaTouchPad() {
+		if (luaTouchPad != null) {
+			luaTouchPad.kill();
+			luaTouchPad.destroy();
+			remove(luaTouchPad);
+			luaTouchPad = null;
 		}
 	}
 
-	public function luaVirtualPadPressed(button:Dynamic):Bool {
-		if(luaVirtualPad != null) {
+	public function luaTouchPadPressed(button:Dynamic):Bool {
+		if(luaTouchPad != null) {
 			if(Std.isOfType(button, String))
-				return luaVirtualPad.buttonPressed(FlxMobileInputID.fromString(button));
+				return luaTouchPad.buttonPressed(MobileInputID.fromString(button));
 			else if(Std.isOfType(button, Array)){
-				var FUCK:Array<String> = button; // haxe said "You Can't Iterate On A Dyanmic Value Please Specificy Iterator or Iterable *insert ned emoji*" so that's the only i foud to fix
-				var idArray:Array<FlxMobileInputID> = [];
+				var FUCK:Array<String> = button; // haxe said "You Can't Iterate On A Dyanmic Value Please Specificy Iterator or Iterable *insert nerd emoji*" so that's the only i foud to fix
+				var idArray:Array<MobileInputID> = [];
 				for(strId in FUCK)
-					idArray.push(FlxMobileInputID.fromString(strId));
-				return luaVirtualPad.anyPressed(idArray);
+					idArray.push(MobileInputID.fromString(strId));
+				return luaTouchPad.anyPressed(idArray);
 			} else
 				return false;
 		}
 		return false;
 	}
 
-	public function luaVirtualPadJustPressed(button:Dynamic):Bool {
-		if(luaVirtualPad != null) {
+	public function luaTouchPadJustPressed(button:Dynamic):Bool {
+		if(luaTouchPad != null) {
 			if(Std.isOfType(button, String))
-				return luaVirtualPad.buttonJustPressed(FlxMobileInputID.fromString(button));
+				return luaTouchPad.buttonJustPressed(MobileInputID.fromString(button));
 			else if(Std.isOfType(button, Array)){
 				var FUCK:Array<String> = button;
-				var idArray:Array<FlxMobileInputID> = [];
+				var idArray:Array<MobileInputID> = [];
 				for(strId in FUCK)
-					idArray.push(FlxMobileInputID.fromString(strId));
-				return luaVirtualPad.anyJustPressed(idArray);
+					idArray.push(MobileInputID.fromString(strId));
+				return luaTouchPad.anyJustPressed(idArray);
 			} else
 				return false;
 		}
 		return false;
 	}
 	
-	public function luaVirtualPadJustReleased(button:Dynamic):Bool {
-		if(luaVirtualPad != null) {
+	public function luaTouchPadJustReleased(button:Dynamic):Bool {
+		if(luaTouchPad != null) {
 			if(Std.isOfType(button, String))
-				return luaVirtualPad.buttonJustReleased(FlxMobileInputID.fromString(button));
+				return luaTouchPad.buttonJustReleased(MobileInputID.fromString(button));
 			else if(Std.isOfType(button, Array)){
 				var FUCK:Array<String> = button;
-				var idArray:Array<FlxMobileInputID> = [];
+				var idArray:Array<MobileInputID> = [];
 				for(strId in FUCK)
-					idArray.push(FlxMobileInputID.fromString(strId));
-				return luaVirtualPad.anyJustReleased(idArray);
+					idArray.push(MobileInputID.fromString(strId));
+				return luaTouchPad.anyJustReleased(idArray);
+			} else
+				return false;
+		}
+		return false;
+	}
+
+	public function luaTouchPadReleased(button:Dynamic):Bool {
+		if(luaTouchPad != null) {
+			if(Std.isOfType(button, String))
+				return luaTouchPad.buttonJustReleased(MobileInputID.fromString(button));
+			else if(Std.isOfType(button, Array)){
+				var FUCK:Array<String> = button;
+				var idArray:Array<MobileInputID> = [];
+				for(strId in FUCK)
+					idArray.push(MobileInputID.fromString(strId));
+				return luaTouchPad.anyReleased(idArray);
 			} else
 				return false;
 		}

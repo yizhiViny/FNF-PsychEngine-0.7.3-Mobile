@@ -44,10 +44,6 @@ class CreditsState extends MusicBeatState
 			['Karim Akra',				'karim',			'Assistant Porter/Helper #1 of Psych Engine Mobile',						'https://youtube.com/@Karim0690',		'FFB4F0'],
 			['MemeHoovy',				'hoovy',			'Helper #2 of Psych Engine Mobile',							'https://twitter.com/meme_hoovy',               'F592C4'],
 			[''],
-			['Mobile Special Thanks'],
-			['MAJigsaw77',				'jigsaw',			'Author of Mobile Controls, New FlxRuntimeShader and Storage Stuff',							'https://github.com/MAJigsaw77',               '898989'],
-			['FutureDorito',				'dorito',			'iOS Helper/Implement',							'https://www.youtube.com/@Futuredorito',               'E69138'],
-			[''],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer and Head of Psych Engine',					 'https://ko-fi.com/shadowmario',		'444444'],
 			['Riveren',				'riveren',			'Main Artist/Animator of Psych Engine',						 'https://twitter.com/riverennn',		'14967B'],
@@ -137,7 +133,7 @@ class CreditsState extends MusicBeatState
 		intendedColor = bg.color;
 		changeSelection();
 
-		addVirtualPad(UP_DOWN, A_B);
+		addTouchPad("UP_DOWN", "A_B");
 
 		super.create();
 	}

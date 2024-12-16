@@ -20,9 +20,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-
 package mobile.options;
 
+import mobile.backend.MobileScaleMode;
+import flixel.input.keyboard.FlxKey;
 import options.BaseOptionsMenu;
 import options.Option;
 
@@ -30,20 +31,26 @@ class MobileOptionsSubState extends BaseOptionsMenu
 {
 	#if android
 	var storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL"];
-	var externalPaths:Array<String> = SUtil.checkExternalPaths(true);
+	var externalPaths:Array<String> = StorageUtil.checkExternalPaths(true);
 	final lastStorageType:String = ClientPrefs.data.storageType;
 	#end
-	var exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
+	final exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
+	final hintOptions:Array<String> = ["No Gradient", "No Gradient (Old)", "Gradient", "Hidden"];
+	var option:Option;
 
 	public function new()
 	{
+		#if android if (!externalPaths.contains('\n'))
+			storageTypes = storageTypes.concat(externalPaths); #end
 		title = 'Mobile Options';
 		rpcTitle = 'Mobile Options Menu'; // for Discord Rich Presence, fuck it
 
-		var option:Option = new Option('Extra Controls', 'Select how many extra buttons you prefere to have\nThey can be used for mechanics with LUA or HScript.', 'extraButtons', 'string', exControlTypes);
+		option = new Option('Extra Controls', 'Select how many extra buttons you prefer to have?\nThey can be used for mechanics with LUA or HScript.',
+			'extraButtons', 'string', exControlTypes);
 		addOption(option);
 
-		var option:Option = new Option('Mobile Controls Opacity', 'How much transparent should the Mobile Controls be?', 'controlsAlpha', 'percent');
+		option = new Option('Mobile Controls Opacity',
+			'Selects the opacity for the mobile buttons (careful not to put it at 0 and lose track of your buttons).', 'controlsAlpha', 'percent');
 		option.scrollSpeed = 1;
 		option.minValue = 0.001;
 		option.maxValue = 1;
@@ -51,29 +58,37 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		option.decimals = 1;
 		option.onChange = () ->
 		{
-			virtualPad.alpha = curOption.getValue();
+			touchPad.alpha = curOption.getValue();
+			ClientPrefs.toggleVolumeKeys();
 		};
 		addOption(option);
 
 		#if mobile
-		var option:Option = new Option('Allow Phone Screensaver', 'If checked, the phone will sleep after going inactive for few seconds.', 'screensaver', 'bool');
-		option.onChange = () ->
-		{
-			lime.system.System.allowScreenTimeout = curOption.getValue();
-		};
+		option = new Option('Allow Phone Screensaver',
+			'If checked, the phone will sleep after going inactive for few seconds.\n(The time depends on your phone\'s options)', 'screensaver', 'bool');
+		option.onChange = () -> lime.system.System.allowScreenTimeout = curOption.getValue();
+		addOption(option);
+
+		option = new Option('Wide Screen Mode',
+			'If checked, The game will stetch to fill your whole screen. (WARNING: Can result in bad visuals & break some mods that resizes the game/cameras)',
+			'wideScreen', 'bool');
+		option.onChange = () -> FlxG.scaleMode = new MobileScaleMode();
 		addOption(option);
 		#end
 
-		if (MobileControls.mode == 4)
+		if (MobileData.mode == 3)
 		{
-			var option:Option = new Option('Hide Hitbox Hints', 'If checked, makes the hitbox invisible.', 'hideHitboxHints', 'bool');
+			option = new Option('Hitbox Design', 'Choose how your hitbox should look like.', 'hitboxType', 'string', hintOptions);
 			addOption(option);
 
-			var option:Option = new Option('Hitbox Position', 'If checked, the hitbox will be put at the bottom of the screen, otherwise will stay at the top.', 'hitbox2', 'bool');
+			option = new Option('Hitbox Position', 'If checked, the hitbox will be put at the bottom of the screen, otherwise will stay at the top.',
+				'hitboxPos', 'bool');
 			addOption(option);
 		}
 
-		var option:Option = new Option('Dynamic Controls Color', 'If checked, the mobile controls color will be set to the notes color in your settings.\n(have effect during gameplay only)', 'dynamicColors', 'bool');
+		option = new Option('Dynamic Controls Color',
+			'If checked, the mobile controls color will be set to the notes color in your settings.\n(have effect during gameplay only)', 'dynamicColors',
+			'bool');
 		addOption(option);
 
 		#if android
@@ -109,7 +124,7 @@ class MobileOptionsSubState extends BaseOptionsMenu
 		if (ClientPrefs.data.storageType != lastStorageType)
 		{
 			onStorageChange();
-			SUtil.showPopUp('Storage Type has been changed and you needed restart the game!!\nPress OK to close the game.', 'Notice!');
+			CoolUtil.showPopUp('Storage Type has been changed and you needed restart the game!!\nPress OK to close the game.', 'Notice!');
 			lime.system.System.exit(0);
 		}
 		#end

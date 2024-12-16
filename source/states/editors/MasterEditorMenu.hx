@@ -74,9 +74,9 @@ class MasterEditorMenu extends MusicBeatState
 		FlxG.mouse.visible = false;
 
 		#if MODS_ALLOWED
-		addVirtualPad(LEFT_FULL, A_B);
+		addTouchPad("LEFT_FULL", "A_B");
 		#else
-		addVirtualPad(UP_DOWN, A_B);
+		addTouchPad("UP_DOWN", "A_B");
 		#end
 
 		super.create();

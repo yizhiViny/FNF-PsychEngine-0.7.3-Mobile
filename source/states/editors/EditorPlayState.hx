@@ -136,7 +136,7 @@ class EditorPlayState extends MusicBeatSubstate
 		daButton = "BACK";
 		#else
         if (controls.mobileC)
-        	daButton = "X";
+        	daButton = "P";
         else
             daButton = "ESC";
         #end
@@ -159,21 +159,21 @@ class EditorPlayState extends MusicBeatSubstate
 		#end
 
 		#if !android
-		addVirtualPad(NONE, P);
-		addVirtualPadCamera(false);
+		addTouchPad("NONE", "P");
+		addTouchPadCamera();
 		#end
 
-		addMobileControls(false);
-		mobileControls.visible = true;
+		addMobileControls();
+		mobileControls.instance.visible = true;
 
 		RecalculateRating();
 	}
 
 	override function update(elapsed:Float)
 	{
-		if(#if !android virtualPad.buttonP.justPressed || #end FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end)
+		if(#if android FlxG.android.justReleased.BACK #else touchPad.buttonP.justPressed #end || FlxG.keys.justPressed.ESCAPE)
 		{
-			mobileControls.visible = false;
+			mobileControls.instance.visible = false;
 			endSong();
 			super.update(elapsed);
 			return;

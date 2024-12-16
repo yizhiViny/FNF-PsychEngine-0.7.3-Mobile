@@ -62,7 +62,7 @@ class MenuCharacterEditorState extends MusicBeatState
 		FlxG.mouse.visible = true;
 		updateCharTypeBox();
 		
-		addVirtualPad(MENU_CHARACTER, MENU_CHARACTER);
+		addTouchPad("MENU_CHARACTER", "MENU_CHARACTER");
 
 		super.create();
 	}
@@ -264,32 +264,32 @@ class MenuCharacterEditorState extends MusicBeatState
 
 		if(!blockInput) {
 			ClientPrefs.toggleVolumeKeys(true);
-			if(FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end || virtualPad.buttonB.justPressed) {
+			if(FlxG.keys.justPressed.ESCAPE #if android || FlxG.android.justPressed.BACK #end || touchPad.buttonB.justPressed) {
 				MusicBeatState.switchState(new states.editors.MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}
 
 			var shiftMult:Int = 1;
-			if(FlxG.keys.pressed.SHIFT || virtualPad.buttonA.pressed) shiftMult = 10;
+			if(FlxG.keys.pressed.SHIFT || touchPad.buttonA.pressed) shiftMult = 10;
 
-			if(FlxG.keys.justPressed.LEFT || virtualPad.buttonLeft.justPressed) {
+			if(FlxG.keys.justPressed.LEFT || touchPad.buttonLeft.justPressed) {
 				characterFile.position[0] += shiftMult;
 				updateOffset();
 			}
-			if(FlxG.keys.justPressed.RIGHT || virtualPad.buttonRight.justPressed) {
+			if(FlxG.keys.justPressed.RIGHT || touchPad.buttonRight.justPressed) {
 				characterFile.position[0] -= shiftMult;
 				updateOffset();
 			}
-			if(FlxG.keys.justPressed.UP || virtualPad.buttonUp.justPressed) {
+			if(FlxG.keys.justPressed.UP || touchPad.buttonUp.justPressed) {
 				characterFile.position[1] += shiftMult;
 				updateOffset();
 			}
-			if(FlxG.keys.justPressed.DOWN || virtualPad.buttonDown.justPressed) {
+			if(FlxG.keys.justPressed.DOWN || touchPad.buttonDown.justPressed) {
 				characterFile.position[1] -= shiftMult;
 				updateOffset();
 			}
 
-			if(FlxG.keys.justPressed.SPACE || virtualPad.buttonC.justPressed && curTypeSelected == 1) {
+			if(FlxG.keys.justPressed.SPACE || touchPad.buttonC.justPressed && curTypeSelected == 1) {
 				grpWeekCharacters.members[curTypeSelected].animation.play('confirm', true);
 			}
 		}
@@ -387,7 +387,7 @@ class MenuCharacterEditorState extends MusicBeatState
 			var characterName:String = splittedImage[splittedImage.length-1].toLowerCase().replace(' ', '');
 
 			#if mobile
-			SUtil.saveContent(characterName, ".json", data);
+			StorageUtil.saveContent(characterName, ".json", data);
 			#else
 			_file = new FileReference();
 			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);

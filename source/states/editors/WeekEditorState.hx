@@ -105,7 +105,7 @@ class WeekEditorState extends MusicBeatState
 
 		FlxG.mouse.visible = true;
 
-		addVirtualPad(UP_DOWN, B);
+		addTouchPad("UP_DOWN", "B");
 
 		super.create();
 	}
@@ -433,7 +433,7 @@ class WeekEditorState extends MusicBeatState
 
 		if(!blockInput) {
 			ClientPrefs.toggleVolumeKeys(true);
-			if(FlxG.keys.justPressed.ESCAPE || virtualPad.buttonB.justPressed) {
+			if(FlxG.keys.justPressed.ESCAPE || touchPad.buttonB.justPressed) {
 				MusicBeatState.switchState(new MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}
@@ -526,7 +526,7 @@ class WeekEditorState extends MusicBeatState
 		if (data.length > 0)
 		{
 			#if mobile
-			SUtil.saveContent(weekFileName, ".json", data);
+			StorageUtil.saveContent(weekFileName, ".json", data);
 			#else
 			_file = new FileReference();
 			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);
@@ -618,7 +618,7 @@ class WeekEditorFreeplayState extends MusicBeatState
 
 		addEditorBox();
 		changeSelection();
-		addVirtualPad(UP_DOWN, B);
+		addTouchPad("UP_DOWN", "B");
 		super.create();
 	}
 	
@@ -797,7 +797,7 @@ class WeekEditorFreeplayState extends MusicBeatState
 			}
 		} else {
 			ClientPrefs.toggleVolumeKeys(true);
-			if(FlxG.keys.justPressed.ESCAPE || virtualPad.buttonB.justPressed) {
+			if(FlxG.keys.justPressed.ESCAPE || touchPad.buttonB.justPressed) {
 				MusicBeatState.switchState(new MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}

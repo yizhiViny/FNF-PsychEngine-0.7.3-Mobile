@@ -13,13 +13,14 @@ to start you off, disabling Videos should be simple, simply Delete the line `"VI
 same goes for *Lua Scripts*, comment out or delete the line with `LUA_ALLOWED`, this and other customization options are all available within the `Project.xml` file
 
 ## Mobile Credits:
-* Lily - Head Porter
-* Karim - Assistant Porter/Helper #1
-* Moxie - Helper #2
+* Lily - Head Porter and linc_luajit-rewriten.
+* Karim - Second Porter.
+* Moxie - Helper.
 
 ### Mobile Special Thanks
-* Mihai Alexandru - Author of mobile controls and also his new storage stuff and FlxRuntimeShader is used here
-* FutureDorito - iOS Helper/Implementer
+* MAJigsaw77 - Author of old mobile controls, new storage stuff and FlxRuntimeShader.
+* FutureDorito - iOS Helper.
+* Sector - Touch Pad Artist.
 
 ## Psych Credits:
 * Shadow Mario - Programmer

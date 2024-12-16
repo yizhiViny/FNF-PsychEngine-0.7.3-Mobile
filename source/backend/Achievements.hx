@@ -228,7 +228,7 @@ class Achievements {
 						{
 							var errorTitle = 'Mod name: ' + Mods.currentModDirectory != null ? Mods.currentModDirectory : "None";
 							var errorMsg = 'Achievement #${i+1} is invalid.';
-							SUtil.showPopUp(errorMsg, errorTitle);
+							CoolUtil.showPopUp(errorMsg, errorTitle);
 							continue;
 						}
 
@@ -237,7 +237,7 @@ class Achievements {
 						{
 							var errorTitle = 'Error on Achievement: ' + (achieve.name != null ? achieve.name : achieve.save);
 							var errorMsg = 'Missing valid "save" value.';
-							SUtil.showPopUp(errorMsg, errorTitle);
+							CoolUtil.showPopUp(errorMsg, errorTitle);
 							continue;
 						}
 						key = key.trim();
@@ -249,7 +249,7 @@ class Achievements {
 			} catch(e:Dynamic) {
 				var errorTitle = 'Mod name: ' + Mods.currentModDirectory != null ? Mods.currentModDirectory : "None";
 				var errorMsg = 'Error loading achievements.json: $e';
-				SUtil.showPopUp(errorMsg, errorTitle);
+				CoolUtil.showPopUp(errorMsg, errorTitle);
 			}
 		}
 		return retVal;

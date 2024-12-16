@@ -160,7 +160,7 @@ class LuaUtils
 				{
 					var errorTitle = 'Mod name: ' + Mods.currentModDirectory;
 					var errorMsg = 'An error occurred: $e';
-					SUtil.showPopUp(errorMsg, errorTitle);
+					CoolUtil.showPopUp(errorMsg, errorTitle);
 				}
 			}
 		}

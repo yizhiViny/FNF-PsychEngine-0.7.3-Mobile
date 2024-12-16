@@ -191,7 +191,7 @@ class NoteSplashDebugState extends MusicBeatState
 		loadFrames();
 		changeSelection();
 		super.create();
-		addVirtualPad(NOTE_SPLASH_DEBUG, NOTE_SPLASH_DEBUG);
+		addTouchPad("NOTE_SPLASH_DEBUG", "NOTE_SPLASH_DEBUG");
 		FlxG.mouse.visible = true;
 	}
 
@@ -214,8 +214,8 @@ class NoteSplashDebugState extends MusicBeatState
 
 		if(!notTyping) return;
 		
-		if (FlxG.keys.justPressed.A || virtualPad.buttonUp.justPressed) changeSelection(-1);
-		else if (FlxG.keys.justPressed.D || virtualPad.buttonDown.justPressed) changeSelection(1);
+		if (FlxG.keys.justPressed.A || touchPad.buttonUp.justPressed) changeSelection(-1);
+		else if (FlxG.keys.justPressed.D || touchPad.buttonDown.justPressed) changeSelection(1);
 
 		if(maxAnims < 1) return;
 
@@ -223,13 +223,13 @@ class NoteSplashDebugState extends MusicBeatState
 		{
 			var movex = 0;
 			var movey = 0;
-			if(FlxG.keys.justPressed.LEFT || virtualPad.buttonLeft2.justPressed) movex = -1;
-			else if(FlxG.keys.justPressed.RIGHT || virtualPad.buttonRight2.justPressed) movex = 1;
+			if(FlxG.keys.justPressed.LEFT || touchPad.buttonLeft2.justPressed) movex = -1;
+			else if(FlxG.keys.justPressed.RIGHT || touchPad.buttonRight2.justPressed) movex = 1;
 
-			if(FlxG.keys.justPressed.UP || virtualPad.buttonUp2.justPressed) movey = 1;
-			else if(FlxG.keys.justPressed.DOWN || virtualPad.buttonDown2.justPressed) movey = -1;
+			if(FlxG.keys.justPressed.UP || touchPad.buttonUp2.justPressed) movey = 1;
+			else if(FlxG.keys.justPressed.DOWN || touchPad.buttonDown2.justPressed) movey = -1;
 			
-			if(FlxG.keys.pressed.SHIFT || virtualPad.buttonZ.pressed)
+			if(FlxG.keys.pressed.SHIFT || touchPad.buttonZ.pressed)
 			{
 				movex *= 10;
 				movey *= 10;
@@ -247,14 +247,14 @@ class NoteSplashDebugState extends MusicBeatState
 		// Copy & Paste
 		if(FlxG.keys.pressed.CONTROL || idk)
 		{
-			if(FlxG.keys.justPressed.C || virtualPad.buttonC.justPressed)
+			if(FlxG.keys.justPressed.C || touchPad.buttonC.justPressed)
 			{
 				var arr:Array<Float> = selectedArray();
 				if(copiedArray == null) copiedArray = [0, 0];
 				copiedArray[0] = arr[0];
 				copiedArray[1] = arr[1];
 			}
-			else if((FlxG.keys.justPressed.V || virtualPad.buttonV.justPressed))
+			else if((FlxG.keys.justPressed.V || touchPad.buttonV.justPressed))
 			{
 			if (copiedArray != null){
 				var offs:Array<Float> = selectedArray();
@@ -275,7 +275,7 @@ class NoteSplashDebugState extends MusicBeatState
 				savedText.visible = false;
 		}
 
-		if(FlxG.keys.justPressed.ENTER || virtualPad.buttonA.justPressed)
+		if(FlxG.keys.justPressed.ENTER || touchPad.buttonA.justPressed)
 		{
 			if (controls.mobileC) {
 		        savedText.text = 'Press A again to save.';
@@ -298,14 +298,14 @@ class NoteSplashDebugState extends MusicBeatState
 		}
 
 		// Reset anim & change anim
-		if (FlxG.keys.justPressed.SPACE || virtualPad.buttonY.justPressed) changeAnim();
-		else if (FlxG.keys.justPressed.S || virtualPad.buttonLeft.justPressed) changeAnim(-1);
-		else if (FlxG.keys.justPressed.W || virtualPad.buttonRight.justPressed) changeAnim(1);
+		if (FlxG.keys.justPressed.SPACE || touchPad.buttonY.justPressed) changeAnim();
+		else if (FlxG.keys.justPressed.S || touchPad.buttonLeft.justPressed) changeAnim(-1);
+		else if (FlxG.keys.justPressed.W || touchPad.buttonRight.justPressed) changeAnim(1);
 
 		// Force frame
 		var updatedFrame:Bool = false;
-		if(updatedFrame = FlxG.keys.justPressed.Q || virtualPad.buttonX.justPressed) forceFrame--;
-		else if(updatedFrame = FlxG.keys.justPressed.E || virtualPad.buttonE.justPressed) forceFrame++;
+		if(updatedFrame = FlxG.keys.justPressed.Q || touchPad.buttonX.justPressed) forceFrame--;
+		else if(updatedFrame = FlxG.keys.justPressed.E || touchPad.buttonE.justPressed) forceFrame++;
 
 		if(updatedFrame)
 		{

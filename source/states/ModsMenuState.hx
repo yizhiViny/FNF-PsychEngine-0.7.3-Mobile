@@ -14,7 +14,6 @@ import flixel.util.FlxSpriteUtil;
 import objects.AttachedSprite;
 import options.ModSettingsSubState;
 import flixel.addons.transition.FlxTransitionableState;
-import mobile.backend.TouchFunctions;
 
 class ModsMenuState extends MusicBeatState
 {
@@ -186,7 +185,7 @@ class ModsMenuState extends MusicBeatState
 
 			FlxG.autoPause = false;
 			changeSelectedMod();
-			addVirtualPad(NONE, B);
+			addTouchPad("NONE", "B");
 			return super.create();
 		}
 
@@ -316,10 +315,10 @@ class ModsMenuState extends MusicBeatState
 		bottomText.scrollFactor.set();
 		add(bottomText);
 
-		addVirtualPad(UP_DOWN, B);
-		virtualPad.y -= 215; // so that you can press the buttons.
+		addTouchPad("UP_DOWN", "B");
+		touchPad.y -= 215; // so that you can press the buttons.
 		if(controls.mobileC)
-			virtualPad.alpha = 0.3;
+			touchPad.alpha = 0.3;
 		super.create();
 	}
 	
@@ -862,7 +861,7 @@ class ModItem extends FlxSpriteGroup
 			{
 				var errorTitle = 'Mod name: ' + Mods.currentModDirectory;
 				var errorMsg = 'An error occurred: $e';
-				SUtil.showPopUp(errorMsg, errorTitle);
+				CoolUtil.showPopUp(errorMsg, errorTitle);
 			}
 		}
 
@@ -989,17 +988,17 @@ class MenuButton extends FlxSpriteGroup
 
 		if (Controls.instance.mobileC) {
 			if(!ignoreCheck)
-				onFocus = TouchFunctions.touchOverlapObject(this);
+				onFocus = TouchUtil.overlaps(this);
 
-			if(onFocus && TouchFunctions.touchJustReleased)
+			if(onFocus && TouchUtil.justReleased)
 				onFocus = false;
 
-			if(onFocus && onClick != null && TouchFunctions.touchJustPressed)
+			if(onFocus && onClick != null && TouchUtil.justPressed)
 				onClick();
 
 			if(_needACheck) {
 				_needACheck = false;
-				setButtonVisibility(TouchFunctions.touchOverlapObject(this));
+				setButtonVisibility(TouchUtil.overlaps(this));
 			}
 		} else {
 			if(!ignoreCheck && !Controls.instance.controllerMode && FlxG.mouse.justMoved && FlxG.mouse.visible)

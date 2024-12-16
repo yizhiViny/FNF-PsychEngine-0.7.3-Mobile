@@ -122,7 +122,7 @@ class AchievementsMenuState extends MusicBeatState
 		
 		_changeSelection();
 
-		addVirtualPad(LEFT_FULL, B_C);
+		addTouchPad("LEFT_FULL", "B_C");
 
 		super.create();
 		
@@ -132,7 +132,7 @@ class AchievementsMenuState extends MusicBeatState
 
 	override function closeSubState() {
 		super.closeSubState();
-		addVirtualPad(LEFT_FULL, B_C);
+		addTouchPad("LEFT_FULL", "B_C");
 	}
 
 	function makeAchievement(achievement:String, data:Achievement, unlocked:Bool, mod:String = null)
@@ -206,9 +206,9 @@ class AchievementsMenuState extends MusicBeatState
 				}
 			}
 			
-			if(MusicBeatState.instance.virtualPad.buttonC.justPressed || controls.RESET && (options[curSelected].unlocked || options[curSelected].curProgress > 0))
+			if(MusicBeatState.getState().touchPad.buttonC.justPressed || controls.RESET && (options[curSelected].unlocked || options[curSelected].curProgress > 0))
 			{
-				removeVirtualPad();
+				removeTouchPad();
 				openSubState(new ResetAchievementSubstate());
 			}
 		}
@@ -303,7 +303,7 @@ class ResetAchievementSubstate extends MusicBeatSubstate
 		add(noText);
 		updateOptions();
 
-		addVirtualPad(LEFT_RIGHT, A);
+		addTouchPad("LEFT_RIGHT", "A");
 	}
 
 	override function update(elapsed:Float)

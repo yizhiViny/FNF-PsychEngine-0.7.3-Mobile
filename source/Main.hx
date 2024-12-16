@@ -15,8 +15,8 @@ import openfl.display.StageScaleMode;
 import lime.system.System as LimeSystem;
 import lime.app.Application;
 import states.TitleState;
+import mobile.backend.MobileScaleMode;
 import openfl.events.KeyboardEvent;
-import mobile.backend.Data;
 #if hl
 import hl.Api;
 #end
@@ -62,10 +62,13 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-		#if (android && EXTERNAL || MEDIA)
-		SUtil.doPermissionsShit();
+		#if mobile
+		#if android
+		StorageUtil.requestPermissions();
 		#end
-		SUtil.uncaughtErrorHandler();
+		Sys.setCwd(StorageUtil.getStorageDirectory());
+		#end
+		backend.CrashHandler.init();
 
 		#if windows
 		@:functionCode("
@@ -74,14 +77,6 @@ class Main extends Sprite
 		setProcessDPIAware() // allows for more crisp visuals
 		DisableProcessWindowsGhosting() // lets you move the window and such if it's not responding
 		")
-		#end
-
-		#if cpp
-		@:privateAccess
-		untyped __global__.__hxcpp_set_critical_error_handler(SUtil.onError);
-		#elseif hl
-		@:privateAccess
-		Api.setErrorHandler(SUtil.onError);
 		#end
 
 		if (stage != null)
@@ -117,10 +112,6 @@ class Main extends Sprite
 			game.width = Math.ceil(stageWidth / game.zoom);
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
-
-		#if mobile
-		Sys.setCwd(#if (android)Path.addTrailingSlash(#end SUtil.getStorageDirectory()#if (android))#end);
-		#end
 	
 		#if LUA_ALLOWED llua.Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
@@ -157,10 +148,14 @@ class Main extends Sprite
 		DiscordClient.prepare();
 		#end
 
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK];
+		#end
+
 		#if mobile
 		LimeSystem.allowScreenTimeout = ClientPrefs.data.screensaver;
+		FlxG.scaleMode = new MobileScaleMode();
 		#end
-		Data.setup();
 
 		// shader coords fix
 		FlxG.signals.gameResized.add(function (w, h) {

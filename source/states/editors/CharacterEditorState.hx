@@ -19,7 +19,6 @@ import lime.system.Clipboard;
 import objects.Character;
 import objects.HealthIcon;
 import objects.Bar;
-import mobile.flixel.FlxButton as MobileButton;
 class CharacterEditorState extends MusicBeatState
 {
 	var character:Character;
@@ -157,8 +156,8 @@ class CharacterEditorState extends MusicBeatState
 		updateHealthBar();
 		character.finishAnimation();
 
-		addVirtualPad(LEFT_FULL, CHARACTER_EDITOR);
-		addVirtualPadCamera(false);
+		addTouchPad("LEFT_FULL", "CHARACTER_EDITOR");
+		addTouchPadCamera();
 
 		if(ClientPrefs.data.cacheOnGPU) Paths.clearUnusedMemory();
 
@@ -880,12 +879,12 @@ class CharacterEditorState extends MusicBeatState
 		var shiftMult:Float = 1;
 		var ctrlMult:Float = 1;
 		var shiftMultBig:Float = 1;
-		if(FlxG.keys.pressed.SHIFT || virtualPad.buttonC.pressed)
+		if(FlxG.keys.pressed.SHIFT || touchPad.buttonC.pressed)
 		{
 			shiftMult = 4;
 			shiftMultBig = 10;
 		}
-		if(FlxG.keys.pressed.CONTROL /*|| virtualPad.buttonC.pressed*/) ctrlMult = 0.25;
+		if(FlxG.keys.pressed.CONTROL /*|| touchPad.buttonC.pressed*/) ctrlMult = 0.25;
 
 		// CAMERA CONTROLS
 		if (FlxG.keys.pressed.J) FlxG.camera.scroll.x -= elapsed * 500 * shiftMult * ctrlMult;
@@ -894,12 +893,12 @@ class CharacterEditorState extends MusicBeatState
 		if (FlxG.keys.pressed.I) FlxG.camera.scroll.y -= elapsed * 500 * shiftMult * ctrlMult;
 
 		var lastZoom = FlxG.camera.zoom;
-		if(FlxG.keys.justPressed.R && !FlxG.keys.pressed.CONTROL || virtualPad.buttonZ.justPressed) FlxG.camera.zoom = 1;
-		else if ((FlxG.keys.pressed.E || virtualPad.buttonX.pressed) && FlxG.camera.zoom < 3) {
+		if(FlxG.keys.justPressed.R && !FlxG.keys.pressed.CONTROL || touchPad.buttonZ.justPressed) FlxG.camera.zoom = 1;
+		else if ((FlxG.keys.pressed.E || touchPad.buttonX.pressed) && FlxG.camera.zoom < 3) {
 			FlxG.camera.zoom += elapsed * FlxG.camera.zoom * shiftMult * ctrlMult;
 			if(FlxG.camera.zoom > 3) FlxG.camera.zoom = 3;
 		}
-		else if ((FlxG.keys.pressed.Q || virtualPad.buttonY.pressed) && FlxG.camera.zoom > 0.1) {
+		else if ((FlxG.keys.pressed.Q || touchPad.buttonY.pressed) && FlxG.camera.zoom > 0.1) {
 			FlxG.camera.zoom -= elapsed * FlxG.camera.zoom * shiftMult * ctrlMult;
 			if(FlxG.camera.zoom < 0.1) FlxG.camera.zoom = 0.1;
 		}
@@ -910,8 +909,8 @@ class CharacterEditorState extends MusicBeatState
 		var changedAnim:Bool = false;
 		if(anims.length > 1)
 		{
-			if((FlxG.keys.justPressed.W  || virtualPad.buttonV.justPressed) && (changedAnim = true)) curAnim--;
-			else if((FlxG.keys.justPressed.S || virtualPad.buttonD.justPressed) && (changedAnim = true)) curAnim++;
+			if((FlxG.keys.justPressed.W  || touchPad.buttonV.justPressed) && (changedAnim = true)) curAnim--;
+			else if((FlxG.keys.justPressed.S || touchPad.buttonD.justPressed) && (changedAnim = true)) curAnim++;
 
 			if(changedAnim)
 			{
@@ -927,16 +926,16 @@ class CharacterEditorState extends MusicBeatState
 		var moveKeys;
 		if (controls.mobileC) {
 			moveKeysP = [
-				virtualPad.buttonLeft.justPressed,
-				virtualPad.buttonRight.justPressed,
-				virtualPad.buttonUp.justPressed,
-				virtualPad.buttonDown.justPressed
+				touchPad.buttonLeft.justPressed,
+				touchPad.buttonRight.justPressed,
+				touchPad.buttonUp.justPressed,
+				touchPad.buttonDown.justPressed
 			];
 			moveKeys = [
-				virtualPad.buttonLeft.pressed,
-				virtualPad.buttonRight.pressed,
-				virtualPad.buttonUp.pressed,
-				virtualPad.buttonDown.pressed
+				touchPad.buttonLeft.pressed,
+				touchPad.buttonRight.pressed,
+				touchPad.buttonUp.pressed,
+				touchPad.buttonDown.pressed
 			];
 		} else {
 			moveKeysP = [
@@ -1011,7 +1010,7 @@ class CharacterEditorState extends MusicBeatState
 				changedOffset = true;
 			}
 		}
-		if (virtualPad.buttonA.justPressed)
+		if (touchPad.buttonA.justPressed)
 		{
 			undoOffsets = [character.offset.x, character.offset.y];
 			character.offset.x = copiedOffset[0];
@@ -1082,13 +1081,13 @@ class CharacterEditorState extends MusicBeatState
 		frameAdvanceText.color = clr;
 
 		// OTHER CONTROLS
-		if(FlxG.keys.justPressed.F12 || virtualPad.buttonS.justPressed)
+		if(FlxG.keys.justPressed.F12 || touchPad.buttonS.justPressed)
 			silhouettes.visible = !silhouettes.visible;
 
-		if((FlxG.keys.justPressed.F1 || virtualPad.buttonF.justPressed)|| (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
+		if((FlxG.keys.justPressed.F1 || touchPad.buttonF.justPressed)|| (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
 		{
 			if(controls.mobileC){
-				virtualPad.forEachAlive(function(button:MobileButton){
+				touchPad.forEachAlive(function(button:TouchButton){
 					if(button.tag != 'F')
 						button.visible = !button.visible;
 				});
@@ -1096,7 +1095,7 @@ class CharacterEditorState extends MusicBeatState
 			helpBg.visible = !helpBg.visible;
 			helpTexts.visible = helpBg.visible;
 		}
-		else if(FlxG.keys.justPressed.ESCAPE || virtualPad.buttonB.justPressed)
+		else if(FlxG.keys.justPressed.ESCAPE || touchPad.buttonB.justPressed)
 		{
 			FlxG.mouse.visible = false;
 			if(!_goToPlayState)
@@ -1270,7 +1269,7 @@ class CharacterEditorState extends MusicBeatState
 		#if MODS_ALLOWED
 		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'characters/');
 		for (folder in foldersToCheck)
-			for (file in FileSystem.readDirectory(folder))
+			for (file in Paths.readDirectory(folder))
 				if(file.toLowerCase().endsWith('.json'))
 				{
 					var charToCheck:String = file.substr(0, file.length - 5);
@@ -1353,7 +1352,7 @@ class CharacterEditorState extends MusicBeatState
 		if (data.length > 0)
 		{
 			#if mobile
-			SUtil.saveContent('$_char', ".json", data);
+			StorageUtil.saveContent('$_char', ".json", data);
 			#else
 			_file = new FileReference();
 			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);

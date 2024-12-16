@@ -131,8 +131,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 			updateTextFrom(optionsArray[i]);
 		}
 
-		addVirtualPad(LEFT_FULL, A_B_C);
-		addVirtualPadCamera(false);
+		addTouchPad("LEFT_FULL", "A_B_C");
+		addTouchPadCamera();
 
 		changeSelection();
 		reloadCheckboxes();
@@ -267,7 +267,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 				}
 			}
 
-			if(controls.RESET || virtualPad.buttonC.justPressed)
+			if(controls.RESET || touchPad.buttonC.justPressed)
 			{
 				for (i in 0...optionsArray.length)
 				{
@@ -302,9 +302,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if(nextAccept > 0) {
 			nextAccept -= 1;
 		}
-		if (virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
-		addVirtualPad(LEFT_FULL, A_B_C);
-		addVirtualPadCamera(false);
+		if (touchPad == null){ //sometimes it dosent add the tpad, hopefully this fixes it
+		addTouchPad("LEFT_FULL", "A_B_C");
+		addTouchPadCamera();
 		}
 		super.update(elapsed);
 	}

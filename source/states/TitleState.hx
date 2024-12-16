@@ -43,8 +43,6 @@ class TitleState extends MusicBeatState
 	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
 
 	public static var initialized:Bool = false;
-	
-	public static var ignoreCopy:Bool = false;
 
 	var blackScreen:FlxSprite;
 	var credGroup:FlxGroup;
@@ -77,26 +75,8 @@ class TitleState extends MusicBeatState
 	{
 		Paths.clearStoredMemory();
 
-		#if android
-		FlxG.android.preventDefaultKeys = [BACK];
-		#end
-
 		#if LUA_ALLOWED
-        	#if (android && EXTERNAL || MEDIA)
-        try {
-        	#end
 		Mods.pushGlobalMods();
-            #if (android && EXTERNAL || MEDIA)
-        } catch (e:Dynamic) {
-            SUtil.showPopUp("Please create folder to\n" + #if EXTERNAL "/storage/emulated/0/." + lime.app.Application.current.meta.get('file') #else "/storage/emulated/0/Android/media/" + lime.app.Application.current.meta.get('packageName') #end + "\nPress OK to close the game", "Error!");
-            Sys.exit(1);
-        }
-            #end
-		#end
-
-		#if mobile
-		if(!CopyState.checkExistingFiles() && !ignoreCopy)
-			FlxG.switchState(new CopyState());
 		#end
 
 		Mods.loadTopMod();
@@ -167,6 +147,7 @@ class TitleState extends MusicBeatState
 			}
 			persistentUpdate = true;
 			persistentDraw = true;
+			MobileData.init();
 		}
 
 		if (FlxG.save.data.weekCompleted != null)

@@ -7,8 +7,6 @@ import backend.PsychCamera;
 
 class MusicBeatState extends FlxUIState
 {
-	public static var instance:MusicBeatState;
-
 	private var curSection:Int = 0;
 	private var stepsToDo:Int = 0;
 
@@ -23,77 +21,96 @@ class MusicBeatState extends FlxUIState
 		return Controls.instance;
 	}
 
-	public var virtualPad:FlxVirtualPad;
-	public var mobileControls:MobileControls;
-	public var camControls:FlxCamera;
-	public var vpadCam:FlxCamera;
+	public var touchPad:TouchPad;
+	public var touchPadCam:FlxCamera;
+	public var mobileControls:IMobileControls;
+	public var mobileControlsCam:FlxCamera;
 
-	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode)
+	public function addTouchPad(DPad:String, Action:String)
 	{
-		virtualPad = new FlxVirtualPad(DPad, Action);
-		virtualPad.alpha = ClientPrefs.data.controlsAlpha;
-		add(virtualPad);
+		touchPad = new TouchPad(DPad, Action);
+		add(touchPad);
 	}
 
-	public function removeVirtualPad()
+	public function removeTouchPad()
 	{
-		if (virtualPad != null)
-			remove(virtualPad);
+		if (touchPad != null)
+		{
+			remove(touchPad);
+			touchPad = FlxDestroyUtil.destroy(touchPad);
+		}
+
+		if(touchPadCam != null)
+		{
+			FlxG.cameras.remove(touchPadCam);
+			touchPadCam = FlxDestroyUtil.destroy(touchPadCam);
+		}
 	}
 
-	public function addMobileControls(DefaultDrawTarget:Bool = true):Void
+	public function addMobileControls(defaultDrawTarget:Bool = false):Void
 	{
-		mobileControls = new MobileControls();
+		var extraMode = MobileData.extraActions.get(ClientPrefs.data.extraButtons);
 
-		camControls = new FlxCamera();
-		camControls.bgColor.alpha = 0;
-		FlxG.cameras.add(camControls, DefaultDrawTarget);
+		switch (MobileData.mode)
+		{
+			case 0: // RIGHT_FULL
+				mobileControls = new TouchPad('RIGHT_FULL', 'NONE', extraMode);
+			case 1: // LEFT_FULL
+				mobileControls = new TouchPad('LEFT_FULL', 'NONE', extraMode);
+			case 2: // CUSTOM
+				mobileControls = MobileData.getTouchPadCustom(new TouchPad('RIGHT_FULL', 'NONE', extraMode));
+			case 3: // HITBOX
+				mobileControls = new Hitbox(extraMode);
+		}
 
-		mobileControls.cameras = [camControls];
-		mobileControls.visible = false;
-		mobileControls.alpha = ClientPrefs.data.controlsAlpha;
-		add(mobileControls);
+		mobileControls.instance = MobileData.setButtonsColors(mobileControls.instance);
+		mobileControlsCam = new FlxCamera();
+		mobileControlsCam.bgColor.alpha = 0;
+		FlxG.cameras.add(mobileControlsCam, defaultDrawTarget);
+
+		mobileControls.instance.cameras = [mobileControlsCam];
+		mobileControls.instance.visible = false;
+		add(mobileControls.instance);
 	}
 
 	public function removeMobileControls()
 	{
 		if (mobileControls != null)
-			remove(mobileControls);
+		{
+			remove(mobileControls.instance);
+			mobileControls.instance = FlxDestroyUtil.destroy(mobileControls.instance);
+			mobileControls = null;
+		}
+
+		if (mobileControlsCam != null)
+		{
+			FlxG.cameras.remove(mobileControlsCam);
+			mobileControlsCam = FlxDestroyUtil.destroy(mobileControlsCam);
+		}
 	}
 
-	public function addVirtualPadCamera(DefaultDrawTarget:Bool = true):Void
+	public function addTouchPadCamera(defaultDrawTarget:Bool = false):Void
 	{
-		if (virtualPad != null)
+		if (touchPad != null)
 		{
-			vpadCam = new FlxCamera();
-			vpadCam.bgColor.alpha = 0;
-			FlxG.cameras.add(vpadCam, DefaultDrawTarget);
-			virtualPad.cameras = [vpadCam];
+			touchPadCam = new FlxCamera();
+			touchPadCam.bgColor.alpha = 0;
+			FlxG.cameras.add(touchPadCam, defaultDrawTarget);
+			touchPad.cameras = [touchPadCam];
 		}
 	}
 
 	override function destroy()
 	{
+		removeTouchPad();
+		removeMobileControls();
+		
 		super.destroy();
-
-		if (virtualPad != null)
-		{
-			virtualPad = FlxDestroyUtil.destroy(virtualPad);
-			virtualPad = null;
-		}
-
-		if (mobileControls != null)
-		{
-			mobileControls = FlxDestroyUtil.destroy(mobileControls);
-			mobileControls = null;
-		}
 	}
 
 	var _psychCameraInitialized:Bool = false;
 
 	override function create() {
-		instance = this;
-
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
 

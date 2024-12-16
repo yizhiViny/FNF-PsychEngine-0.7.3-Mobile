@@ -385,7 +385,7 @@ class ChartingState extends MusicBeatState
 
 		updateGrid();
 
-        addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
+        addTouchPad("LEFT_FULL", "A_B_C_D_V_X_Y_Z");
 				
 		super.create();
 	}
@@ -514,7 +514,7 @@ class ChartingState extends MusicBeatState
 		for (i in 0...directories.length) {
 			var directory:String = directories[i];
 			if(FileSystem.exists(directory)) {
-				for (file in FileSystem.readDirectory(directory)) {
+				for (file in Paths.readDirectory(directory)) {
 					var path = haxe.io.Path.join([directory, file]);
 					if (!FileSystem.isDirectory(path) && file.endsWith('.json')) {
 						var charToCheck:String = file.substr(0, file.length - 5);
@@ -576,7 +576,7 @@ class ChartingState extends MusicBeatState
 		for (i in 0...directories.length) {
 			var directory:String = directories[i];
 			if(FileSystem.exists(directory)) {
-				for (file in FileSystem.readDirectory(directory)) {
+				for (file in Paths.readDirectory(directory)) {
 					var path = haxe.io.Path.join([directory, file]);
 					if (!FileSystem.isDirectory(path) && file.endsWith('.json')) {
 						var stageToCheck:String = file.substr(0, file.length - 5);
@@ -928,7 +928,7 @@ class ChartingState extends MusicBeatState
 		#if sys
 		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'custom_notetypes/');
 		for (folder in foldersToCheck)
-			for (file in FileSystem.readDirectory(folder))
+			for (file in Paths.readDirectory(folder))
 			{
 				var fileName:String = file.toLowerCase().trim();
 				var wordLen:Int = 4; //length of word ".lua" and ".txt";
@@ -994,7 +994,7 @@ class ChartingState extends MusicBeatState
 		for (i in 0...directories.length) {
 			var directory:String =  directories[i];
 			if(FileSystem.exists(directory)) {
-				for (file in FileSystem.readDirectory(directory)) {
+				for (file in Paths.readDirectory(directory)) {
 					var path = haxe.io.Path.join([directory, file]);
 					if (!FileSystem.isDirectory(path) && file != 'readme.txt' && file.endsWith('.txt')) {
 						var fileToCheck:String = file.substr(0, file.length - 4);
@@ -1511,8 +1511,7 @@ class ChartingState extends MusicBeatState
 			DiscordClient.changePresence("Chart Editor", StringTools.replace(_song.song, '-', ' '));
 			#end
 		}
-		removeVirtualPad();
-		addVirtualPad(LEFT_FULL, A_B_C_D_V_X_Y_Z);
+		touchPad.active = touchPad.visible = true;
 		super.closeSubState();
 	}
 
@@ -1777,7 +1776,7 @@ class ChartingState extends MusicBeatState
 			{
 				dummyArrow.visible = true;
 				dummyArrow.x = Math.floor(touch.x / GRID_SIZE) * GRID_SIZE;
-				if (FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed)
+				if (FlxG.keys.pressed.SHIFT || touchPad.buttonY.pressed)
 					dummyArrow.y = touch.y;
 				else
 					dummyArrow.y = Math.floor(touch.y / GRID_SIZE) * GRID_SIZE;
@@ -1876,7 +1875,7 @@ class ChartingState extends MusicBeatState
 
 		if (!blockInput)
 		{
-			if (FlxG.keys.justPressed.ESCAPE || virtualPad.buttonC.justPressed)
+			if (FlxG.keys.justPressed.ESCAPE || touchPad.buttonC.justPressed)
 			{
 				if(FlxG.sound.music != null)
 					FlxG.sound.music.stop();
@@ -1896,10 +1895,10 @@ class ChartingState extends MusicBeatState
 				playtesting = true;
 				playtestingTime = Conductor.songPosition;
 				playtestingOnComplete = FlxG.sound.music.onComplete;
-				removeVirtualPad();
+				touchPad.active = touchPad.visible = false;
 				openSubState(new states.editors.EditorPlayState(playbackSpeed));
 			}
-			else if (FlxG.keys.justPressed.ENTER || virtualPad.buttonA.justPressed)
+			else if (FlxG.keys.justPressed.ENTER || touchPad.buttonA.justPressed)
 			{
 				autosaveSong();
 				FlxG.mouse.visible = false;
@@ -1925,7 +1924,7 @@ class ChartingState extends MusicBeatState
 			}
 
 
-			if (FlxG.keys.justPressed.BACKSPACE || virtualPad.buttonB.justPressed) {
+			if (FlxG.keys.justPressed.BACKSPACE || touchPad.buttonB.justPressed) {
 				// Protect against lost data when quickly leaving the chart editor.
 				autosaveSong();
 				PlayState.chartingMode = false;
@@ -1935,15 +1934,15 @@ class ChartingState extends MusicBeatState
 				return;
 			}
 
-			if(virtualPad.buttonV.justPressed || FlxG.keys.justPressed.Z && FlxG.keys.pressed.CONTROL) {
+			if(touchPad.buttonV.justPressed || FlxG.keys.justPressed.Z && FlxG.keys.pressed.CONTROL) {
 				undo();
 			}
 
-			if(FlxG.keys.justPressed.Z || virtualPad.buttonZ.justPressed && curZoom > 0 && !FlxG.keys.pressed.CONTROL) {
+			if(FlxG.keys.justPressed.Z || touchPad.buttonZ.justPressed && curZoom > 0 && !FlxG.keys.pressed.CONTROL) {
 				--curZoom;
 				updateZoom();
 			}
-			if(FlxG.keys.justPressed.X || virtualPad.buttonD.justPressed && curZoom < zoomList.length-1) {
+			if(FlxG.keys.justPressed.X || touchPad.buttonD.justPressed && curZoom < zoomList.length-1) {
 				curZoom++;
 				updateZoom();
 			}
@@ -1964,7 +1963,7 @@ class ChartingState extends MusicBeatState
 				}
 			}
 
-			if (FlxG.keys.justPressed.SPACE || virtualPad.buttonX.justPressed)
+			if (FlxG.keys.justPressed.SPACE || touchPad.buttonX.justPressed)
 			{
 				if(vocals != null) vocals.play();
 				if(opponentVocals != null) opponentVocals.play();
@@ -2013,17 +2012,17 @@ class ChartingState extends MusicBeatState
 
 			//ARROW VORTEX SHIT NO DEADASS
 
-			if ((FlxG.keys.pressed.W || FlxG.keys.pressed.S) || (virtualPad.buttonUp.pressed || virtualPad.buttonDown.pressed))
+			if ((FlxG.keys.pressed.W || FlxG.keys.pressed.S) || (touchPad.buttonUp.pressed || touchPad.buttonDown.pressed))
 			{
 				FlxG.sound.music.pause();
 
 				var holdingShift:Float = 1;
 				if (FlxG.keys.pressed.CONTROL) holdingShift = 0.25;
-				else if (FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed) holdingShift = 4;
+				else if (FlxG.keys.pressed.SHIFT || touchPad.buttonY.pressed) holdingShift = 4;
 
 				var daTime:Float = 700 * FlxG.elapsed * holdingShift;
 
-				FlxG.sound.music.time += daTime * ((FlxG.keys.pressed.W || virtualPad.buttonUp.pressed) ? -1 : 1);
+				FlxG.sound.music.time += daTime * ((FlxG.keys.pressed.W || touchPad.buttonUp.pressed) ? -1 : 1);
 
 				pauseAndSetVocalsTime();
 			}
@@ -2050,7 +2049,7 @@ class ChartingState extends MusicBeatState
 
 			var style = currentType;
 
-			if (FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed){
+			if (FlxG.keys.pressed.SHIFT || touchPad.buttonY.pressed){
 				style = 3;
 			}
 
@@ -2142,12 +2141,12 @@ class ChartingState extends MusicBeatState
 				}
 			}
 			var shiftThing:Int = 1;
-			if (FlxG.keys.pressed.SHIFT || virtualPad.buttonY.pressed)
+			if (FlxG.keys.pressed.SHIFT || touchPad.buttonY.pressed)
 				shiftThing = 4;
 
-			if (FlxG.keys.justPressed.D || virtualPad.buttonRight.justPressed)
+			if (FlxG.keys.justPressed.D || touchPad.buttonRight.justPressed)
 				changeSection(curSec + shiftThing);
-			if (FlxG.keys.justPressed.A || virtualPad.buttonLeft.justPressed) {
+			if (FlxG.keys.justPressed.A || touchPad.buttonLeft.justPressed) {
 				if(curSec <= 0) {
 					changeSection(_song.notes.length-1);
 				} else {
@@ -3226,7 +3225,7 @@ class ChartingState extends MusicBeatState
 		if ((data != null) && (data.length > 0))
 		{
 			#if mobile
-			SUtil.saveContent(Paths.formatToSongPath(_song.song), ".json", data.trim());
+			StorageUtil.saveContent(Paths.formatToSongPath(_song.song), ".json", data.trim());
 			#else
 			_file = new FileReference();
 			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);
@@ -3257,7 +3256,7 @@ class ChartingState extends MusicBeatState
 		if ((data != null) && (data.length > 0))
 		{
 			#if mobile
-			SUtil.saveContent("events", ".json", data.trim());
+			StorageUtil.saveContent("events", ".json", data.trim());
 			#else
 			_file = new FileReference();
 			_file.addEventListener(#if desktop Event.SELECT #else Event.COMPLETE #end, onSaveComplete);

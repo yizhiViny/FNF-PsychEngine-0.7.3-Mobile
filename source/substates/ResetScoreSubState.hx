@@ -72,8 +72,8 @@ class ResetScoreSubState extends MusicBeatSubstate
 		noText.x += 200;
 		add(noText);
 
-		addVirtualPad(LEFT_RIGHT, A_B);
-		addVirtualPadCamera(false);
+		addTouchPad("LEFT_RIGHT", "A_B");
+		addTouchPadCamera();
 
 		updateOptions();
 	}
@@ -112,9 +112,9 @@ class ResetScoreSubState extends MusicBeatSubstate
                         controls.isInSubstate = false;
 			close();
 		}
-		if (virtualPad == null){ //sometimes it dosent add the vpad, hopefully this fixes it
-		addVirtualPad(LEFT_RIGHT, A_B);
-		addVirtualPadCamera(false);
+		if (touchPad == null){ //sometimes it dosent add the tpad, hopefully this fixes it
+		addTouchPad("LEFT_RIGHT", "A_B");
+		addTouchPadCamera();
 		}
 		super.update(elapsed);
 	}
