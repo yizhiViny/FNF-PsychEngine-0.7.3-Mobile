@@ -57,7 +57,7 @@
     {
       "button": "buttonRight2",
       "graphic": "right",
-      "x": 1148,
+      "x": 1156,
       "y": 395,
       "width": 132,
       "height": 125,
@@ -66,7 +66,7 @@
     {
       "button": "buttonDown2",
       "graphic": "down",
-      "x": 1022,
+      "x": 1030,
       "y": 395,
       "width": 132,
       "height": 125,

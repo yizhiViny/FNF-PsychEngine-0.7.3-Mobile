@@ -1,18 +1,23 @@
 {
   "buttons": [
     {
+      "button": "buttonA",
+      "graphic": "a",
+      "x": 1156,
+      "y": 596,
+      "color": "0xFF0000"
+    },
+    {
       "button": "buttonB",
       "graphic": "b",
-      "x": 1022,
-      "y": 587,
-      "width": 132,
-      "height": 125,
+      "x": 1032,
+      "y": 596,
       "color": "0xFFCB00"
     },
     {
       "button": "buttonE",
       "graphic": "e",
-      "x": 1148,
+      "x": 1156,
       "y": 2,
       "width": 132,
       "height": 125,
@@ -21,7 +26,7 @@
     {
       "button": "buttonX",
       "graphic": "x",
-      "x": 1022,
+      "x": 1030,
       "y": 2,
       "width": 132,
       "height": 125,
@@ -30,7 +35,7 @@
     {
       "button": "buttonY",
       "graphic": "y",
-      "x": 1148,
+      "x": 1156,
       "y": 252,
       "width": 132,
       "height": 125,
@@ -39,25 +44,16 @@
     {
       "button": "buttonZ",
       "graphic": "z",
-      "x": 1022,
+      "x": 1030,
       "y": 252,
       "width": 132,
       "height": 125,
       "color": "0xCCB98E"
     },
     {
-      "button": "buttonA",
-      "graphic": "a",
-      "x": 1148,
-      "y": 587,
-      "width": 132,
-      "height": 125,
-      "color": "0xFF0000"
-    },
-    {
       "button": "buttonC",
       "graphic": "c",
-      "x": 1148,
+      "x": 1156,
       "y": 127,
       "width": 132,
       "height": 125,
@@ -66,7 +62,7 @@
     {
       "button": "buttonV",
       "graphic": "v",
-      "x": 1022,
+      "x": 1030,
       "y": 127,
       "width": 132,
       "height": 125,
