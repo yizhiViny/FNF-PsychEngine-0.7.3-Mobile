@@ -71,8 +71,8 @@
       "name": "linc_luajit",
       "type": "git",
       "dir": null,
-      "ref": "2edc92ef7bf705600d24ffee1a6f574235be61f7",
-      "url": "https://github.com/mcagabe19-stuff/linc_luajit-rewriten"
+      "ref": "c23b13e6621e40be9c716fb6278aec5bf1cfa58f",
+      "url": "https://github.com/superpowers04/linc_luajit"
     },
     {
       "name": "flxanimate",
