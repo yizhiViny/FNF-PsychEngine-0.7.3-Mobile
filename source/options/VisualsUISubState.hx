@@ -2,6 +2,7 @@ package options;
 
 import objects.Note;
 import objects.StrumNote;
+import objects.Alphabet;
 
 class VisualsUISubState extends BaseOptionsMenu
 {
@@ -114,7 +115,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		addOption(option);
 
 		var option:Option = new Option('FPS Counter',
-			'If unchecked, hides the FPS Counter.',
+			'If unchecked, hides FPS Counter.',
 			'showFPS',
 			'bool');
 		addOption(option);
@@ -130,7 +131,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		#end
 		
 		var option:Option = new Option('Pause Screen Song:',
-			"Which song do you prefer for the Pause Screen?",
+			"What song do you prefer for the Pause Screen?",
 			'pauseMusic',
 			'string',
 			pauseMusics);
@@ -154,7 +155,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		#end
 
 		var option:Option = new Option('Combo Stacking',
-			"If unchecked, Ratings and Combo won't stack, saving on System Memory and easier to read",
+			"If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read",
 			'comboStacking',
 			'bool');
 		addOption(option);

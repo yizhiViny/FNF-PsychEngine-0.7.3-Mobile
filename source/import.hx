@@ -5,12 +5,13 @@ import backend.Discord;
 #end
 
 //Psych
+#if LUA_ALLOWED
+import llua.*;
+import llua.Lua;
+#end
+
 #if ACHIEVEMENTS_ALLOWED
 import backend.Achievements;
-#end
-#if VIDEOS_ALLOWED
-import backend.VideoManager;
-import backend.VideoSpriteManager;
 #end
 
 //Mobile Controls

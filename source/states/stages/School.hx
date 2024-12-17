@@ -4,7 +4,7 @@ import states.stages.objects.*;
 import substates.GameOverSubstate;
 import cutscenes.DialogueBox;
 
-import openfl.utils.Assets;
+import openfl.utils.Assets as OpenFlAssets;
 
 class School extends BaseStage
 {
@@ -111,7 +111,7 @@ class School extends BaseStage
 		#if MODS_ALLOWED
 		if (!FileSystem.exists(file))
 		#else
-		if (!Assets.exists(file))
+		if (!OpenFlAssets.exists(file))
 		#end
 		{
 			startCountdown();

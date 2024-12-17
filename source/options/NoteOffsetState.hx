@@ -552,10 +552,4 @@ class NoteOffsetState extends MusicBeatState
 
 		changeModeText.text = '< ${str.toUpperCase()} ${str2.toUpperCase()} >';
 	}
-
-	override function destroy(){
-		startMousePos.put();
-		startComboOffset.put();
-		super.destroy();
-	}
 }

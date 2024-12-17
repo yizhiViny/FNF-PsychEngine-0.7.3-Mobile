@@ -4,14 +4,23 @@ import flixel.graphics.frames.FlxFrame.FlxFrameAngle;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.graphics.FlxGraphic;
 import flixel.math.FlxRect;
+
 import openfl.display.BitmapData;
 import openfl.display3D.textures.RectangleTexture;
 import openfl.utils.AssetType;
-import openfl.utils.Assets;
+import openfl.utils.Assets as OpenFlAssets;
 import openfl.system.System;
 import openfl.geom.Rectangle;
-import openfl.media.Sound;
+
+import lime.utils.Assets;
+import flash.media.Sound;
+
 import haxe.Json;
+
+
+#if MODS_ALLOWED
+import backend.Mods;
+#end
 
 class Paths
 {
@@ -113,10 +122,11 @@ class Paths
 			var levelPath:String = '';
 			if(currentLevel != 'shared') {
 				levelPath = getLibraryPathForce(file, 'week_assets', currentLevel);
-				if (Assets.exists(levelPath, type))
+				if (OpenFlAssets.exists(levelPath, type))
 					return levelPath;
 			}
 		}
+
 		return getSharedPath(file);
 	}
 
@@ -233,8 +243,8 @@ class Paths
 				localTrackedAssets.push(file);
 				return currentTrackedAssets.get(file);
 			}
-			else if (Assets.exists(file, IMAGE))
-				bitmap = Assets.getBitmapData(file);
+			else if (OpenFlAssets.exists(file, IMAGE))
+				bitmap = OpenFlAssets.getBitmapData(file);
 		}
 
 		if (bitmap != null)
@@ -257,8 +267,8 @@ class Paths
 			else
 			#end
 			{
-				if (Assets.exists(file, IMAGE))
-					bitmap = Assets.getBitmapData(file);
+				if (OpenFlAssets.exists(file, IMAGE))
+					bitmap = OpenFlAssets.getBitmapData(file);
 			}
 
 			if(bitmap == null) return null;
@@ -303,7 +313,7 @@ class Paths
 		}
 		#end
 		var path:String = getPath(key, TEXT);
-		if(Assets.exists(path, TEXT)) return Assets.getText(path);
+		if(OpenFlAssets.exists(path, TEXT)) return Assets.getText(path);
 		return null;
 	}
 
@@ -335,7 +345,7 @@ class Paths
 		}
 		#end
 
-		if(Assets.exists(getPath(key, type, library, false))) {
+		if(OpenFlAssets.exists(getPath(key, type, library, false))) {
 			return true;
 		}
 		return false;
@@ -347,7 +357,7 @@ class Paths
 		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
 
 		var myXml:Dynamic = getPath('images/$key.xml', TEXT, library, true);
-		if(Assets.exists(myXml) #if MODS_ALLOWED || (FileSystem.exists(myXml) && (useMod = true)) #end )
+		if(OpenFlAssets.exists(myXml) #if MODS_ALLOWED || (FileSystem.exists(myXml) && (useMod = true)) #end )
 		{
 			#if MODS_ALLOWED
 			return FlxAtlasFrames.fromSparrow(imageLoaded, (useMod ? File.getContent(myXml) : myXml));
@@ -358,7 +368,7 @@ class Paths
 		else
 		{
 			var myJson:Dynamic = getPath('images/$key.json', TEXT, library, true);
-			if(Assets.exists(myJson) #if MODS_ALLOWED || (FileSystem.exists(myJson) && (useMod = true)) #end )
+			if(OpenFlAssets.exists(myJson) #if MODS_ALLOWED || (FileSystem.exists(myJson) && (useMod = true)) #end )
 			{
 				#if MODS_ALLOWED
 				return FlxAtlasFrames.fromTexturePackerJson(imageLoaded, (useMod ? File.getContent(myJson) : myJson));
@@ -452,9 +462,9 @@ class Paths
 		{
 			var retKey:String = (path != null) ? '$path/$key' : key;
 			retKey = ((path == 'songs') ? 'songs:' : '') + getPath('$retKey.$SOUND_EXT', SOUND, library);
-			if(Assets.exists(retKey, SOUND))
+			if(OpenFlAssets.exists(retKey, SOUND))
 			{
-				currentTrackedSounds.set(gottenPath, Assets.getSound(retKey));
+				currentTrackedSounds.set(gottenPath, OpenFlAssets.getSound(retKey));
 				//trace('precached vanilla sound: $retKey');
 			}
 		}

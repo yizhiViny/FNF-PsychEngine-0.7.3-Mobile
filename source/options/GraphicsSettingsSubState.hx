@@ -6,7 +6,6 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 {
 	var antialiasingOption:Int;
 	var boyfriend:Character = null;
-
 	public function new()
 	{
 		title = 'Graphics';

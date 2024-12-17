@@ -7,13 +7,14 @@ class FlxAnimateFunctions
 {
 	public static function implement(funk:FunkinLua)
 	{
-		funk.set("makeFlxAnimateSprite", function(tag:String, ?x:Float = 0, ?y:Float = 0, ?loadFolder:String = null) {
+		var lua:State = funk.lua;
+		Lua_helper.add_callback(lua, "makeFlxAnimateSprite", function(tag:String, ?x:Float = 0, ?y:Float = 0, ?loadFolder:String = null) {
 			tag = tag.replace('.', '');
 			var lastSprite = PlayState.instance.variables.get(tag);
 			if(lastSprite != null)
 			{
-				PlayState.instance.remove(lastSprite);
 				lastSprite.kill();
+				PlayState.instance.remove(lastSprite);
 				lastSprite.destroy();
 			}
 
@@ -23,12 +24,12 @@ class FlxAnimateFunctions
 			mySprite.active = true;
 		});
 
-		funk.set("loadAnimateAtlas", function(tag:String, folderOrImg:Dynamic, ?spriteJson:Dynamic = null, ?animationJson:Dynamic = null) {
+		Lua_helper.add_callback(lua, "loadAnimateAtlas", function(tag:String, folderOrImg:Dynamic, ?spriteJson:Dynamic = null, ?animationJson:Dynamic = null) {
 			var spr:FlxAnimate = PlayState.instance.variables.get(tag);
 			if(spr != null) Paths.loadAnimateAtlas(spr, folderOrImg, spriteJson, animationJson);
 		});
 		
-		funk.set("addAnimationBySymbol", function(tag:String, name:String, symbol:String, ?framerate:Float = 24, ?loop:Bool = false, ?matX:Float = 0, ?matY:Float = 0)
+		Lua_helper.add_callback(lua, "addAnimationBySymbol", function(tag:String, name:String, symbol:String, ?framerate:Float = 24, ?loop:Bool = false, ?matX:Float = 0, ?matY:Float = 0)
 		{
 			var obj:Dynamic = PlayState.instance.variables.get(tag);
 			if(cast (obj, FlxAnimate) == null) return false;
@@ -42,7 +43,7 @@ class FlxAnimateFunctions
 			return true;
 		});
 
-		funk.set("addAnimationBySymbolIndices", function(tag:String, name:String, symbol:String, ?indices:Any = null, ?framerate:Float = 24, ?loop:Bool = false, ?matX:Float = 0, ?matY:Float = 0)
+		Lua_helper.add_callback(lua, "addAnimationBySymbolIndices", function(tag:String, name:String, symbol:String, ?indices:Any = null, ?framerate:Float = 24, ?loop:Bool = false, ?matX:Float = 0, ?matY:Float = 0)
 		{
 			var obj:Dynamic = PlayState.instance.variables.get(tag);
 			if(cast (obj, FlxAnimate) == null) return false;

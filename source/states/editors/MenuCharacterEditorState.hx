@@ -9,8 +9,9 @@ import flixel.ui.FlxButton;
 import openfl.net.FileReference;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
-import openfl.net.FileFilter;
+import flash.net.FileFilter;
 import haxe.Json;
+
 import objects.MenuCharacter;
 
 class MenuCharacterEditorState extends MusicBeatState

@@ -1,5 +1,6 @@
 package states.editors;
 
+import flash.geom.Rectangle;
 import haxe.Json;
 import haxe.format.JsonParser;
 import haxe.io.Bytes;
@@ -18,12 +19,12 @@ import flixel.ui.FlxButton;
 
 import flixel.util.FlxSort;
 import lime.media.AudioBuffer;
-import openfl.utils.Assets;
+import lime.utils.Assets;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
-import openfl.geom.Rectangle;
 import openfl.net.FileReference;
+import openfl.utils.Assets as OpenFlAssets;
 
 import backend.Song;
 import backend.Section;
@@ -36,7 +37,11 @@ import objects.HealthIcon;
 import objects.AttachedSprite;
 import objects.Character;
 import substates.Prompt;
-import openfl.media.Sound;
+
+
+#if sys
+import flash.media.Sound;
+#end
 
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)
@@ -451,7 +456,7 @@ class ChartingState extends MusicBeatState
 			#if sys
 			if (#if MODS_ALLOWED FileSystem.exists(Paths.modsJson(songName + '/events')) || #end FileSystem.exists(file))
 			#else
-			if (Assets.exists(file))
+			if (OpenFlAssets.exists(file))
 			#end
 			{
 				clearEvents();
@@ -1323,7 +1328,7 @@ class ChartingState extends MusicBeatState
 		blockPressWhileTypingOnStepper.push(voicesOppVolume);
 		
 		#if FLX_PITCH
-		sliderRate = new FlxUISlider(this, 'playbackSpeed', 120, 120, 0.5, 3, 150, #if !hl null #else 0 #end, 5, FlxColor.WHITE, FlxColor.BLACK);
+		sliderRate = new FlxUISlider(this, 'playbackSpeed', 120, 120, 0.5, 3, 150, null, 5, FlxColor.WHITE, FlxColor.BLACK);
 		sliderRate.nameLabel.text = 'Playback Rate';
 		tab_group_chart.add(sliderRate);
 		#end
@@ -1386,7 +1391,7 @@ class ChartingState extends MusicBeatState
 		check_disableNoteRGB.callback = function()
 		{
 			_song.disableNoteRGB = check_disableNoteRGB.checked;
-                        updateGrid();
+			updateGrid();
 			//trace('CHECKED!');
 		};
 
@@ -2211,8 +2216,7 @@ class ChartingState extends MusicBeatState
 		"\nSection: " + curSec +
 		"\n\nBeat: " + Std.string(curDecBeat).substring(0,4) +
 		"\n\nStep: " + curStep +
-		if ((quantization - 2) % 10 == 0 && quantization != 12) "\n\nBeat Snap: " + quantization + "nd";
-		else "\n\nBeat Snap: " + quantization + "th";
+		"\n\nBeat Snap: " + quantization + "th";
 
 		var playedSound:Array<Bool> = [false, false, false, false]; //Prevents ouchy GF sex sounds
 		curRenderedNotes.forEachAlive(function(note:Note) {
@@ -2721,7 +2725,7 @@ class ChartingState extends MusicBeatState
 		if (!FileSystem.exists(path))
 		#else
 		var path:String = Paths.getSharedPath(characterPath);
-		if (!Assets.exists(path))
+		if (!OpenFlAssets.exists(path))
 		#end
 		{
 			path = Paths.getSharedPath('characters/' + Character.DEFAULT_CHARACTER + '.json'); //If a character couldn't be found, change him to BF just to prevent a crash
@@ -2731,7 +2735,7 @@ class ChartingState extends MusicBeatState
 		#if MODS_ALLOWED
 		var rawJson = File.getContent(path);
 		#else
-		var rawJson = Assets.getText(path);
+		var rawJson = OpenFlAssets.getText(path);
 		#end
 		return cast Json.parse(rawJson);
 	}
@@ -3038,7 +3042,7 @@ class ChartingState extends MusicBeatState
 		{
 			curRenderedNotes.forEachAlive(function(note:Note)
 			{
-				if (note.overlapsPoint(FlxPoint.weak(strumLineNotes.members[d].x + 1,strumLine.y+1)) && note.noteData == d%4)
+				if (note.overlapsPoint(new FlxPoint(strumLineNotes.members[d].x + 1,strumLine.y+1)) && note.noteData == d%4)
 				{
 						//trace('tryin to delete note...');
 						if(!delnote) deleteNote(note);

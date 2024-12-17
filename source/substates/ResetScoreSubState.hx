@@ -2,7 +2,7 @@ package substates;
 
 import backend.WeekData;
 import backend.Highscore;
-import flixel.addons.transition.FlxTransitionableState;
+
 import flixel.FlxSubState;
 import objects.HealthIcon;
 
@@ -96,7 +96,6 @@ class ResetScoreSubState extends MusicBeatSubstate
 		}
 		if(controls.BACK) {
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
-			ClientPrefs.saveSettings();
 			close();
 			controls.isInSubstate = false;
 		} else if(controls.ACCEPT) {
@@ -108,7 +107,6 @@ class ResetScoreSubState extends MusicBeatSubstate
 				}
 			}
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
-			ClientPrefs.saveSettings();
                         controls.isInSubstate = false;
 			close();
 		}
@@ -129,15 +127,5 @@ class ResetScoreSubState extends MusicBeatSubstate
 		noText.alpha = alphas[1 - confirmInt];
 		noText.scale.set(scales[1 - confirmInt], scales[1 - confirmInt]);
 		if(week == -1) icon.animation.curAnim.curFrame = confirmInt;
-	}
-
-	override function destroy(){
-		bg = FlxDestroyUtil.destroy(bg);
-		alphabetArray = FlxDestroyUtil.destroyArray(alphabetArray);
-		icon = FlxDestroyUtil.destroy(icon);
-                yesText = FlxDestroyUtil.destroy(yesText);
-		noText = FlxDestroyUtil.destroy(noText);
-
-		super.destroy();
 	}
 }

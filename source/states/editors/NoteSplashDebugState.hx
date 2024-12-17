@@ -6,8 +6,6 @@ import objects.NoteSplash;
 import flixel.addons.ui.FlxInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 
-using StringTools;
-
 class NoteSplashDebugState extends MusicBeatState
 {
 	var config:NoteSplashConfig;
@@ -363,7 +361,7 @@ class NoteSplashDebugState extends MusicBeatState
 		var strToSave = config.anim + '\n' + config.minFps + ' ' + config.maxFps;
 		for (offGroup in config.offsets)
 			strToSave += '\n' + offGroup[0] + ' ' + offGroup[1];
-			
+
 		var pathSplit:Array<String> = (Paths.getPath('images/$texturePath.png', IMAGE, true).split('.png')[0]).split(':');
 		var path:String = pathSplit[pathSplit.length-1].trim() + '.txt';
 		var assetsDir:String = '';

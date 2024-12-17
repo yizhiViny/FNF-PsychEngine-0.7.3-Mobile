@@ -2,7 +2,6 @@ package substates;
 
 import objects.AttachedText;
 import objects.CheckboxThingie;
-import flixel.addons.transition.FlxTransitionableState;
 
 class GameplayChangersSubstate extends MusicBeatSubstate
 {
@@ -84,7 +83,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
                 controls.isInSubstate = true;
 
 		super();
-
+		
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0.6;
 		add(bg);
@@ -153,9 +152,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		}
 
 		if (controls.BACK) {
-			ClientPrefs.saveSettings();
-			close();
 			controls.isInSubstate = false;
+			close();
+			ClientPrefs.saveSettings();
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 		}
 

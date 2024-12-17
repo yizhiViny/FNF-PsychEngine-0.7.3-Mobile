@@ -7,7 +7,6 @@ import flixel.FlxGame;
 import flixel.FlxState;
 import haxe.io.Path;
 import openfl.Assets;
-import openfl.system.System;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -20,9 +19,7 @@ import openfl.events.KeyboardEvent;
 #if COPYSTATE_ALLOWED
 import states.CopyState;
 #end
-#if hl
-import hl.Api;
-#end
+
 #if linux
 import lime.graphics.Image;
 
@@ -31,6 +28,7 @@ import lime.graphics.Image;
 	#define GAMEMODE_AUTO
 ')
 #end
+
 class Main extends Sprite
 {
 	var game = {
@@ -121,22 +119,19 @@ class Main extends Sprite
 			game.zoom = 1.0;
 		#end
 	
-		#if LUA_ALLOWED llua.Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
+		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
-
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-
 		addChild(new FlxGame(game.width, game.height, #if COPYSTATE_ALLOWED !CopyState.checkExistingFiles() ? CopyState : #end game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
-
-		Achievements.load();
 
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-		if(fpsVar != null)
+		if(fpsVar != null) {
 			fpsVar.visible = ClientPrefs.data.showFPS;
+		}
 
 		#if linux
 		var icon = Image.fromFile("icon.png");

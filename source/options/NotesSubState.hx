@@ -9,7 +9,7 @@ import lime.system.Clipboard;
 import flixel.util.FlxGradient;
 import objects.StrumNote;
 import objects.Note;
-import flixel.addons.transition.FlxTransitionableState;
+
 import shaders.RGBPalette;
 import shaders.RGBPalette.RGBShaderReference;
 
@@ -189,8 +189,8 @@ class NotesSubState extends MusicBeatSubstate
 		controllerPointer.visible = controls.controllerMode;
 		_lastControllerMode = controls.controllerMode;
 
-        addTouchPad("NONE", "B_C");
-                touchPad.buttonB.x = FlxG.width - 132;
+		addTouchPad("NONE", "B_C");
+ 		touchPad.buttonB.x = FlxG.width - 132;
 		touchPad.buttonC.x = 0;
 		touchPad.buttonC.y = FlxG.height - 135;
 	}
@@ -488,7 +488,7 @@ class NotesSubState extends MusicBeatSubstate
 				}
 				else if (holdingOnObj == colorWheel)
 				{
-					var center:FlxPoint = FlxPoint.weak(colorWheel.x + colorWheel.width/2, colorWheel.y + colorWheel.height/2);
+					var center:FlxPoint = new FlxPoint(colorWheel.x + colorWheel.width/2, colorWheel.y + colorWheel.height/2);
 					var mouse:FlxPoint = pointerFlxPoint();
 					var hue:Float = FlxMath.wrap(FlxMath.wrap(Std.int(mouse.degreesTo(center)), 0, 360) - 90, 0, 360);
 					var sat:Float = FlxMath.bound(mouse.dist(center) / colorWheel.width*2, 0, 1);
@@ -665,8 +665,8 @@ class NotesSubState extends MusicBeatSubstate
 		{
 			Note.initializeGlobalRGBShader(i);
 			var newNote:StrumNote = new StrumNote(150 + (480 / dataArray.length * i), 200, i, 0);
+			newNote.useRGBShader = true;
 			newNote.setGraphicSize(102);
-                        newNote.useRGBShader = true;
 			newNote.updateHitbox();
 			newNote.ID = i;
 			myNotes.add(newNote);

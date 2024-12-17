@@ -3,12 +3,12 @@ package states;
 import flixel.FlxObject;
 import flixel.util.FlxSort;
 import objects.Bar;
-import flixel.addons.transition.FlxTransitionableState;
 
 #if ACHIEVEMENTS_ALLOWED
 class AchievementsMenuState extends MusicBeatState
 {
 	public var curSelected:Int = 0;
+
 	public var options:Array<Dynamic> = [];
 	public var grpOptions:FlxSpriteGroup;
 	public var nameText:FlxText;

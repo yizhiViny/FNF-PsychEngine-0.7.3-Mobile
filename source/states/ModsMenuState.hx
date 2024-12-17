@@ -6,8 +6,8 @@ import backend.Mods;
 import flixel.ui.FlxButton;
 import flixel.FlxBasic;
 import flixel.graphics.FlxGraphic;
-import openfl.geom.Rectangle;
-import openfl.utils.Assets;
+import flash.geom.Rectangle;
+import lime.utils.Assets;
 import haxe.Json;
 
 import flixel.util.FlxSpriteUtil;
@@ -188,6 +188,7 @@ class ModsMenuState extends MusicBeatState
 			addTouchPad("NONE", "B");
 			return super.create();
 		}
+		//
 
 		bgTitle = FlxSpriteUtil.drawRoundRectComplex(new FlxSprite(bgList.x + bgList.width + 20, 40).makeGraphic(840, 180, FlxColor.TRANSPARENT), 0, 0, 840, 180, 15, 15, 0, 0, FlxColor.BLACK);
 		bgTitle.alpha = 0.6;
@@ -386,7 +387,7 @@ class ModsMenuState extends MusicBeatState
 			}
 			var lastMode = hoveringOnMods;
 			if(modsList.all.length > 1)
-				{
+			{
 				if(!controls.mobileC && FlxG.mouse.justPressed)
 				{
 					for (i in centerMod-2...centerMod+3)
@@ -654,6 +655,7 @@ class ModsMenuState extends MusicBeatState
 			curSelectedMod = max;
 			limited = true;
 		}
+		
 		if(!controls.mobileC && !isMouseWheel && limited && Math.abs(add) == 1)
 		{
 			if(add < 0) // pressed up on first mod
@@ -905,10 +907,9 @@ class ModItem extends FlxSpriteGroup
 			if(pack.iconFramerate != null) this.iconFps = pack.iconFramerate;
 			if(pack.color != null)
 			{
-				this.bgColor = FlxColor.fromRGB(
-					pack.color[0] != null ? pack.color[0] : 170,
-					pack.color[1] != null ? pack.color[1] : 0,
-					pack.color[2] != null ? pack.color[2] : 255);
+				this.bgColor = FlxColor.fromRGB(pack.color[0] != null ? pack.color[0] : 170,
+											  pack.color[1] != null ? pack.color[1] : 0,
+											  pack.color[2] != null ? pack.color[2] : 255);
 			}
 			this.mustRestart = (pack.restart == true);
 		}

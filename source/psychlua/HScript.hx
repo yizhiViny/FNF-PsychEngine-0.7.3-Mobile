@@ -111,10 +111,6 @@ class HScript extends SScript
 		#end
 		set('ShaderFilter', openfl.filters.ShaderFilter);
 		set('StringTools', StringTools);
-		#if VIDEOS_ALLOWED
-		set('VideoSpriteManager', backend.VideoSpriteManager);
-		set('VideoManager', backend.VideoManager);
-		#end
 		#if flxanimate
 		set('FlxAnimate', FlxAnimate);
 		#end
@@ -295,18 +291,19 @@ class HScript extends SScript
 		set('Function_StopLua', LuaUtils.Function_StopLua); //doesnt do much cuz HScript has a lower priority than Lua
 		set('Function_StopHScript', LuaUtils.Function_StopHScript);
 		set('Function_StopAll', LuaUtils.Function_StopAll);
-
+		
 		set('add', FlxG.state.add);
-                set('insert', FlxG.state.insert);
-                set('remove', FlxG.state.remove);
+		set('insert', FlxG.state.insert);
+		set('remove', FlxG.state.remove);
 
                 if(PlayState.instance == FlxG.state)
-                {
-                        set('addBehindGF', PlayState.instance.addBehindGF);
-                        set('addBehindDad', PlayState.instance.addBehindDad);
-                        set('addBehindBF', PlayState.instance.addBehindBF);
-                        setSpecialObject(PlayState.instance, false, PlayState.instance.instancesExclude);
-                }
+		{
+			set('addBehindGF', PlayState.instance.addBehindGF);
+			set('addBehindDad', PlayState.instance.addBehindDad);
+			set('addBehindBF', PlayState.instance.addBehindBF);
+			setSpecialObject(PlayState.instance, false, PlayState.instance.instancesExclude);
+		}
+
                 #if LUA_ALLOWED
 		set("addTouchPad", (DPadMode:String, ActionMode:String) -> {
 			PlayState.instance.makeLuaTouchPad(DPadMode, ActionMode);
