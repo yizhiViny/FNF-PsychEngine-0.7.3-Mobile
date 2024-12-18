@@ -71,7 +71,7 @@
       "name": "linc_luajit",
       "type": "git",
       "dir": null,
-      "ref": "c23b13e6621e40be9c716fb6278aec5bf1cfa58f",
+      "ref": "dbcde2ac6131654e6f7bf15f76b2cdc9772aaf49",
       "url": "https://github.com/MobilePorting/linc_luajit-0.7plus"
     },
     {
