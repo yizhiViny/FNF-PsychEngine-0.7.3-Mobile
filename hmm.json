@@ -38,7 +38,7 @@
       "name": "hxcpp",
       "type": "git",
       "dir": null,
-      "ref": "11e539717336ea776b6f27917cb5f11e143aea03",
+      "ref": "master",
       "url": "https://github.com/mcagabe19-stuff/hxcpp"
     },
     {
@@ -52,7 +52,7 @@
       "name": "SScript",
       "type": "git",
       "dir": null,
-      "ref": "c4dc4756b37f276441b3ebb3082c90c7514f275e",
+      "ref": "main",
       "url": "https://github.com/mcagabe19-stuff/SScript-7.7.0"
     },
     {
@@ -64,28 +64,28 @@
       "name": "hxdiscord_rpc",
       "type": "git",
       "dir": null,
-      "ref": "bff4d27dcf1e02a06b84871cce9fe7d624ff517f",
+      "ref": "main",
       "url": "https://github.com/MAJigsaw77/hxdiscord_rpc"
     },
     {
       "name": "linc_luajit",
       "type": "git",
       "dir": null,
-      "ref": "dbcde2ac6131654e6f7bf15f76b2cdc9772aaf49",
+      "ref": "main",
       "url": "https://github.com/MobilePorting/linc_luajit-0.7plus"
     },
     {
       "name": "flxanimate",
       "type": "git",
       "dir": null,
-      "ref": "6d11b11f65f822a2a2ad01018fa8bcea0437bf5a",
+      "ref": "dev",
       "url": "https://github.com/ShadowMario/flxanimate.git"
     },
     {
       "name": "extension-androidtools",
       "type": "git",
       "dir": null,
-      "ref": "8c1304bbac73d9ff6269cef0979a8e04493b3f3e",
+      "ref": "main",
       "url": "https://github.com/MAJigsaw77/extension-androidtools"
     }
   ]
