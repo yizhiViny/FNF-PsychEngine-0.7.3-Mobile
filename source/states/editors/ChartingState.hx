@@ -390,7 +390,7 @@ class ChartingState extends MusicBeatState
 
 		updateGrid();
 
-        addTouchPad("LEFT_FULL", "A_B_C_D_V_X_Y_Z");
+        addTouchPad("LEFT_FULL", "CHART_EDITOR");
 				
 		super.create();
 	}
@@ -1749,7 +1749,7 @@ class ChartingState extends MusicBeatState
 		if (controls.mobileC) {
 		for (touch in FlxG.touches.list)
 		{
-			if (touch.justReleased)
+			if (touch.justPressed)
 			{
 				if (touch.overlaps(curRenderedNotes))
 				{
@@ -1757,11 +1757,25 @@ class ChartingState extends MusicBeatState
 					{
 						if (touch.overlaps(note))
 						{
-							deleteNote(note);
+							if (touchPad.buttonF.pressed)
+							{
+								selectNote(note);
+							}
+							else if (FlxG.keys.pressed.ALT)
+							{
+								selectNote(note);
+								curSelectedNote[3] = curNoteTypes[currentType];
+								updateGrid();
+							}
+							else
+							{
+								//trace('tryin to delete note...');
+								deleteNote(note);
+							}
 						}
 					});
 				}
-				else
+				else if (!touchPad.buttonF.pressed)
 				{
 					if (touch.x > gridBG.x
 						&& touch.x < gridBG.x + gridBG.width
@@ -1918,11 +1932,11 @@ class ChartingState extends MusicBeatState
 			}
 
 			if(curSelectedNote != null && curSelectedNote[1] > -1) {
-				if (FlxG.keys.justPressed.E)
+				if (touchPad.buttonDown2.justPressed || FlxG.keys.justPressed.E)
 				{
 					changeNoteSustain(Conductor.stepCrochet);
 				}
-				if (FlxG.keys.justPressed.Q)
+				if (touchPad.buttonUp2.justPressed || FlxG.keys.justPressed.Q)
 				{
 					changeNoteSustain(-Conductor.stepCrochet);
 				}
@@ -2197,7 +2211,7 @@ class ChartingState extends MusicBeatState
 			playbackSpeed -= 0.01;
 		if (!holdingShift && pressedRB || holdingShift && holdingRB)
 			playbackSpeed += 0.01;
-		if (FlxG.keys.pressed.ALT && (pressedLB || pressedRB || holdingLB || holdingRB))
+		if (touchPad.buttonG.justPressed || (FlxG.keys.pressed.ALT && (pressedLB || pressedRB || holdingLB || holdingRB)))
 			playbackSpeed = 1;
 		//
 
