@@ -576,6 +576,7 @@ class EditorPlayState extends MusicBeatSubstate
 		var pixelShitPart1:String = "";
 		var pixelShitPart2:String = '';
 
+		if(ClientPrefs.data.popUpRating) {
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating.image + pixelShitPart2));
 		rating.screenCenter();
 		rating.x = coolText.x - 40;
@@ -695,6 +696,7 @@ class EditorPlayState extends MusicBeatSubstate
 			},
 			startDelay: Conductor.crochet * 0.002 / playbackRate
 		});
+		}
 	}
 
 	private function onKeyPress(event:KeyboardEvent):Void
@@ -930,7 +932,7 @@ class EditorPlayState extends MusicBeatSubstate
 	}
 
 	public function invalidateNote(note:Note):Void {
-		//note.kill();
+		if (!ClientPrefs.data.lowQuality) note.kill();
 		notes.remove(note, true);
 		note.destroy();
 	}
