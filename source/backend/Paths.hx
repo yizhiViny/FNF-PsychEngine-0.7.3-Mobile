@@ -528,6 +528,14 @@ class Paths
 			var fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
 			if(FileSystem.exists(fileToCheck)) {
 				return fileToCheck;
+				#if linux
+				else
+				{
+					var newPath:String = findFile(key);
+					if (newPath != null)
+						return newPath;
+				}
+				#end
 			}
 		}
 
@@ -535,8 +543,64 @@ class Paths
 			var fileToCheck:String = mods(mod + '/' + key);
 			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;
+			#if linux
+			else
+			{
+				var newPath:String = findFile(key);
+				if (newPath != null)
+					return newPath;
+			}
+			#end
+			
 		}
 		return #if mobile Sys.getCwd() + #end 'mods/' + key;
+	}
+	#end
+
+	#if linux
+	static function findFile(key:String):String // used above ^^^^
+	{
+		var targetDir:Array<String> = key.replace('\\', '/').split('/');
+		var searchDir:String = mods(Mods.currentModDirectory + '/' + targetDir[0]);
+		targetDir.remove(targetDir[0]);
+
+		for (x in targetDir)
+		{
+			if (x == '')
+				continue;
+			var newPart:String = findNode(searchDir, x);
+			if (newPart != null)
+			{
+				searchDir += '/' + newPart;
+			}
+			else
+				return null;
+		}
+		// trace('MATCH WITH $key! RETURNING $searchDir');
+		return searchDir;
+	}
+
+	static function findNode(dir:String, key:String):String
+	{
+		var allFiles:Array<String> = null;
+		try
+		{
+			allFiles = Paths.readDirectory(dir);
+		}
+		catch (e)
+		{
+			return null;
+		}
+
+		var allSearchies:Array<String> = allFiles.map(s -> s.toLowerCase());
+		for (i => name in allSearchies)
+		{
+			if (key.toLowerCase() == name)
+			{
+				return allFiles[i];
+			}
+		}
+		return null;
 	}
 	#end
 

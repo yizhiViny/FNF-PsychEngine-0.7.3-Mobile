@@ -414,7 +414,11 @@ class PlayState extends MusicBeatState
 		// "GLOBAL" SCRIPTS
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'scripts/'))
+			#if linux
+			for (file in CoolUtil.sortAlphabetically(Paths.readDirectory(folder)))
+			#else
 			for (file in Paths.readDirectory(folder))
+			#end
 			{
 				#if LUA_ALLOWED
 				if(file.toLowerCase().endsWith('.lua'))
@@ -605,7 +609,11 @@ class PlayState extends MusicBeatState
 		// SONG SPECIFIC SCRIPTS
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'data/$songName/'))
+			#if linux
+			for (file in CoolUtil.sortAlphabetically(Paths.readDirectory(folder)))
+			#else
 			for (file in Paths.readDirectory(folder))
+			#end
 			{
 				#if LUA_ALLOWED
 				if(file.toLowerCase().endsWith('.lua'))
