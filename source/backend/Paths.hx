@@ -555,7 +555,6 @@ class Paths
 		}
 		return #if mobile Sys.getCwd() + #end 'mods/' + key;
 	}
-	#end
 
 	#if linux
 	static function findFile(key:String):String // used above ^^^^
@@ -602,6 +601,7 @@ class Paths
 		}
 		return null;
 	}
+	#end
 	#end
 
 	#if flxanimate
