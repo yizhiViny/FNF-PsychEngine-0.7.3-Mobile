@@ -22,6 +22,8 @@
 
 package mobile.objects;
 
+import flixel.util.FlxSignal.FlxTypedSignal;
+
 /**
  * ...
  * @author: Karim Akra and Lily Ross (mcagabe19)
@@ -67,6 +69,8 @@ class TouchPad extends MobileInputManager implements IMobileControls
 	public var buttonExtra2:TouchButton = new TouchButton(0, 0);
 
 	public var instance:MobileInputManager;
+	public var onButtonDown:FlxTypedSignal<TouchButton->Void> = new FlxTypedSignal<TouchButton->Void>();
+	public var onButtonUp:FlxTypedSignal<TouchButton->Void> = new FlxTypedSignal<TouchButton->Void>();
 
 	/**
 	 * Create a gamepad.
@@ -128,6 +132,8 @@ class TouchPad extends MobileInputManager implements IMobileControls
 	override public function destroy()
 	{
 		super.destroy();
+		onButtonUp.destroy();
+		onButtonDown.destroy();
 
 		for (fieldName in Reflect.fields(this))
 		{
@@ -201,6 +207,9 @@ class TouchPad extends MobileInputManager implements IMobileControls
 		button.tag = Graphic.toUpperCase();
 		button.color = Color;
 		button.parentAlpha = button.alpha;
+
+		button.onDown.callback = () -> onButtonDown.dispatch(button);
+		button.onOut.callback = button.onUp.callback = () -> onButtonUp.dispatch(button);
 		return button;
 	}
 

@@ -149,6 +149,11 @@ class EditorPlayState extends MusicBeatSubstate
 		tipText.scrollFactor.set();
 		add(tipText);
 		FlxG.mouse.visible = false;
+
+		addMobileControls();
+		mobileControls.instance.visible = true;
+		mobileControls.onButtonDown.add(onButtonPress);
+		mobileControls.onButtonUp.add(onButtonRelease);
 		
 		generateSong(PlayState.SONG.song);
 
@@ -164,9 +169,6 @@ class EditorPlayState extends MusicBeatSubstate
 		addTouchPad("NONE", "P");
 		addTouchPadCamera();
 		#end
-
-		addMobileControls();
-		mobileControls.instance.visible = true;
 
 		RecalculateRating();
 	}
@@ -783,6 +785,18 @@ class EditorPlayState extends MusicBeatSubstate
 			spr.playAnim('static');
 			spr.resetAnim = 0;
 		}
+	}
+
+	private function onButtonPress(button:TouchButton):Void
+	{
+		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
+		if (button.justPressed) keyPressed(buttonCode);
+	}
+
+	private function onButtonRelease(button:TouchButton):Void
+	{
+		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
+		if(buttonCode > -1) keyReleased(buttonCode);
 	}
 	
 	// Hold notes

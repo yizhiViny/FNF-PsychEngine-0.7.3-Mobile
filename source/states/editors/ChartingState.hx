@@ -322,35 +322,37 @@ class ChartingState extends MusicBeatState
 		UI_box.y = 25;
 		UI_box.scrollFactor.set();
 
-                if (controls.mobileC) {
-		text =
-		"Up/Down - Change Conductor's strum time
-		\nLeft/Right - Go to the previous/next section
-		\nHold Y to move 4x faster
-		\nZ/D - Zoom in/out
-		\n
-		\nC - Test your chart inside Chart Editor
-		\nA - Play your chart
-		\nX - Stop/Resume song";
-                } else {
-		text =
-		"W/S or Mouse Wheel - Change Conductor's strum time
-		\nA/D - Go to the previous/next section
-		\nLeft/Right - Change Snap
-		\nUp/Down - Change Conductor's Strum Time with Snapping" +
-		#if FLX_PITCH
-		"\nLeft Bracket / Right Bracket - Change Song Playback Rate (SHIFT to go Faster)
-		\nALT + Left Bracket / Right Bracket - Reset Song Playback Rate" +
-		#end
-		"\nHold Shift to move 4x faster
-		\nHold Control and click on an arrow to select it
-		\nZ/X - Zoom in/out
-		\n
-		\nEsc - Test your chart inside Chart Editor
-		\nEnter - Play your chart
-		\nQ/E - Decrease/Increase Note Sustain Length
-		\nSpace - Stop/Resume song";
-                }
+		if (controls.mobileC)
+		{
+			text = "Up/Down - Change Conductor's strum time
+			\nLeft/Right - Go to the previous/next section"
+			#if FLX_PITCH + "\nG - Reset Song Playback Rate" + #end
+			"\nHold Y to move 4x faster
+			\nHold H and touch on an arrow to select it
+			\nV/D - Zoom in/out
+			\n
+			\nC - Test your chart inside Chart Editor
+			\nA - Play your chart
+			\nUp/Down (On The Right) - Decrease/Increase Note Sustain Length
+			\nX - Stop/Resume Song";
+		}
+		else
+		{
+			text = "W/S or Mouse Wheel - Change Conductor's strum time
+			\nA/D - Go to the previous/next section
+			\nLeft/Right - Change Snap
+			\nUp/Down - Change Conductor's Strum Time with Snapping"
+			+ #if FLX_PITCH "\nLeft Bracket / Right Bracket - Change Song Playback Rate (SHIFT to go Faster)
+			\nALT + Left Bracket / Right Bracket - Reset Song Playback Rate"
+			+ #end "\nHold Shift to move 4x faster
+			\nHold Control and click on an arrow to select it
+			\nZ/X - Zoom in/out
+			\n
+			\nEsc - Test your chart inside Chart Editor
+			\nEnter - Play your chart
+			\nQ/E - Decrease/Increase Note Sustain Length
+			\nSpace - Stop/Resume song";
+		}
 
 		var tipTextArray:Array<String> = text.split('\n');
 		for (i in 0...tipTextArray.length) {
@@ -1516,7 +1518,6 @@ class ChartingState extends MusicBeatState
 			DiscordClient.changePresence("Chart Editor", StringTools.replace(_song.song, '-', ' '));
 			#end
 		}
-		touchPad.active = touchPad.visible = true;
 		super.closeSubState();
 	}
 
@@ -1914,7 +1915,6 @@ class ChartingState extends MusicBeatState
 				playtesting = true;
 				playtestingTime = Conductor.songPosition;
 				playtestingOnComplete = FlxG.sound.music.onComplete;
-				touchPad.active = touchPad.visible = false;
 				openSubState(new states.editors.EditorPlayState(playbackSpeed));
 			}
 			else if (FlxG.keys.justPressed.ENTER || touchPad.buttonA.justPressed)
@@ -1953,11 +1953,11 @@ class ChartingState extends MusicBeatState
 				return;
 			}
 
-			if(touchPad.buttonV.justPressed || FlxG.keys.justPressed.Z && FlxG.keys.pressed.CONTROL) {
+			if(touchPad.buttonZ.justPressed || FlxG.keys.justPressed.Z && FlxG.keys.pressed.CONTROL) {
 				undo();
 			}
 
-			if(FlxG.keys.justPressed.Z || touchPad.buttonZ.justPressed && curZoom > 0 && !FlxG.keys.pressed.CONTROL) {
+			if(FlxG.keys.justPressed.Z || touchPad.buttonV.justPressed && curZoom > 0 && !FlxG.keys.pressed.CONTROL) {
 				--curZoom;
 				updateZoom();
 			}
