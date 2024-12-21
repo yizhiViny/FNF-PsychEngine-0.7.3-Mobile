@@ -170,7 +170,6 @@ class Controls
 			if (requestedInstance.touchPad.anyPressed(keys) == true)
 				return true;
 
-
 		return false;
 	}
 
