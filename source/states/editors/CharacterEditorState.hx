@@ -166,7 +166,7 @@ class CharacterEditorState extends MusicBeatState
 	function addHelpScreen()
 	{
 		var str:String;
-		if (controls.mobileC) {
+		if (controls.mobileC)
 			str = "CAMERA
 			\nX/Y - Camera Zoom In/Out
 			\nZ - Reset Camera Zoom
@@ -179,8 +179,8 @@ class CharacterEditorState extends MusicBeatState
 			\nOTHER
 			\nS - Toggle Silhouettes
 			\nHold C - Move Offsets 10x faster and Camera 4x faster";
-		} else {
-		str = "CAMERA
+		else
+			str = "CAMERA
 			\nE/Q - Camera Zoom In/Out
 			\nJ/K/L/I - Move Camera
 			\nR - Reset Camera Zoom
@@ -199,7 +199,6 @@ class CharacterEditorState extends MusicBeatState
 			\nF12 - Toggle Silhouettes
 			\nHold Shift - Move Offsets 10x faster and Camera 4x faster
 			\nHold Control - Move camera 4x slower";
-		}
 
 		helpBg = new FlxSprite().makeGraphic(1, 1, FlxColor.BLACK);
 		helpBg.scale.set(FlxG.width, FlxG.height);
@@ -935,7 +934,8 @@ class CharacterEditorState extends MusicBeatState
 		var changedOffset = false;
 		var moveKeysP;
 		var moveKeys;
-		if (controls.mobileC) {
+		if (controls.mobileC)
+		{
 			moveKeysP = [
 				touchPad.buttonLeft.justPressed,
 				touchPad.buttonRight.justPressed,
@@ -1095,7 +1095,8 @@ class CharacterEditorState extends MusicBeatState
 
 		if((FlxG.keys.justPressed.F1 || touchPad.buttonF.justPressed)|| (helpBg.visible && FlxG.keys.justPressed.ESCAPE))
 		{
-			if(controls.mobileC){
+			if (controls.mobileC)
+			{
 				touchPad.forEachAlive(function(button:TouchButton){
 					if(button.tag != 'F')
 						button.visible = !button.visible;

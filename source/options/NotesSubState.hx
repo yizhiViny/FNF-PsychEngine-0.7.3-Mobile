@@ -94,7 +94,8 @@ class NotesSubState extends MusicBeatSubstate
 		var sigh:String;
 		var sighPosX:Int;
 
-		if (controls.mobileC) {
+		if (controls.mobileC)
+		{
 			sigh = "PRESS";
 			sighPosX = 44;
 		} else {
@@ -161,12 +162,12 @@ class NotesSubState extends MusicBeatSubstate
 		var tipY = 660;
 		var tipText:String;
 
-		if (controls.mobileC) {
+		if (controls.mobileC)
+		{
 			tipText = "Press C to Reset the selected Note Part.";
 			tipY = 0;
-		} else {
+		} else
 			tipText = "Press RELOAD to Reset the selected Note Part.";
-		}
 
 		var tip:FlxText = new FlxText(tipX, tipY, 0, tipText, 16);
 		tip.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -197,11 +198,8 @@ class NotesSubState extends MusicBeatSubstate
 
 	function updateTip()
 	{
-		if (controls.mobileC) {
-		// do sex
-		} else {
-		tipTxt.text = 'Hold ' + (!controls.controllerMode ? 'Shift' : 'Left Shoulder Button') + ' + Press RESET key to fully reset the selected Note.';
-                }
+		if (!controls.mobileC)
+			tipTxt.text = 'Hold ' + (!controls.controllerMode ? 'Shift' : 'Left Shoulder Button') + ' + Press RESET key to fully reset the selected Note.';
 	}
 
 	var _storedColor:FlxColor;

@@ -392,7 +392,7 @@ class ChartingState extends MusicBeatState
 
 		updateGrid();
 
-        addTouchPad("LEFT_FULL", "CHART_EDITOR");
+		addTouchPad("LEFT_FULL", "CHART_EDITOR");
 				
 		super.create();
 	}
@@ -1747,18 +1747,78 @@ class ChartingState extends MusicBeatState
 		FlxG.watch.addQuick('daBeat', curBeat);
 		FlxG.watch.addQuick('daStep', curStep);
 
-		if (controls.mobileC) {
-		for (touch in FlxG.touches.list)
+		if (controls.mobileC)
 		{
-			if (touch.justPressed)
+			for (touch in FlxG.touches.list)
 			{
-				if (touch.overlaps(curRenderedNotes))
+				if (touch.justPressed)
+				{
+					if (touch.overlaps(curRenderedNotes))
+					{
+						curRenderedNotes.forEachAlive(function(note:Note)
+						{
+							if (touch.overlaps(note))
+							{
+								if (touchPad.buttonF.pressed)
+								{
+									selectNote(note);
+								}
+								else if (FlxG.keys.pressed.ALT)
+								{
+									selectNote(note);
+									curSelectedNote[3] = curNoteTypes[currentType];
+									updateGrid();
+								}
+								else
+								{
+									// trace('tryin to delete note...');
+									deleteNote(note);
+								}
+							}
+						});
+					}
+					else if (!touchPad.buttonF.pressed)
+					{
+						if (touch.x > gridBG.x
+							&& touch.x < gridBG.x + gridBG.width
+							&& touch.y > gridBG.y
+							&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+						{
+							FlxG.log.add('added note');
+							addNote();
+						}
+					}
+				}
+
+				if (touch.x > gridBG.x
+					&& touch.x < gridBG.x + gridBG.width
+					&& touch.y > gridBG.y
+					&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+				{
+					dummyArrow.visible = true;
+					dummyArrow.x = Math.floor(touch.x / GRID_SIZE) * GRID_SIZE;
+					if (FlxG.keys.pressed.SHIFT || touchPad.buttonY.pressed)
+						dummyArrow.y = touch.y;
+					else
+						dummyArrow.y = Math.floor(touch.y / GRID_SIZE) * GRID_SIZE;
+				}
+				else
+				{
+					dummyArrow.visible = false;
+				}
+			}
+		}
+		else
+		{
+			if (FlxG.mouse.justPressed)
+			{
+				if (FlxG.mouse.overlaps(curRenderedNotes))
 				{
 					curRenderedNotes.forEachAlive(function(note:Note)
 					{
-						if (touch.overlaps(note))
+						if (FlxG.mouse.overlaps(note))
 						{
-							if (touchPad.buttonF.pressed)
+							if (FlxG.keys.pressed.CONTROL)
 							{
 								selectNote(note);
 							}
@@ -1770,18 +1830,18 @@ class ChartingState extends MusicBeatState
 							}
 							else
 							{
-								//trace('tryin to delete note...');
+								// trace('tryin to delete note...');
 								deleteNote(note);
 							}
 						}
 					});
 				}
-				else if (!touchPad.buttonF.pressed)
+				else
 				{
-					if (touch.x > gridBG.x
-						&& touch.x < gridBG.x + gridBG.width
-						&& touch.y > gridBG.y
-						&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+					if (FlxG.mouse.x > gridBG.x
+						&& FlxG.mouse.x < gridBG.x + gridBG.width
+						&& FlxG.mouse.y > gridBG.y
+						&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
 					{
 						FlxG.log.add('added note');
 						addNote();
@@ -1789,77 +1849,22 @@ class ChartingState extends MusicBeatState
 				}
 			}
 
-			if (touch.x > gridBG.x
-				&& touch.x < gridBG.x + gridBG.width
-				&& touch.y > gridBG.y
-				&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+			if (FlxG.mouse.x > gridBG.x
+				&& FlxG.mouse.x < gridBG.x + gridBG.width
+				&& FlxG.mouse.y > gridBG.y
+				&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
 			{
 				dummyArrow.visible = true;
-				dummyArrow.x = Math.floor(touch.x / GRID_SIZE) * GRID_SIZE;
-				if (FlxG.keys.pressed.SHIFT || touchPad.buttonY.pressed)
-					dummyArrow.y = touch.y;
+				dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
+				if (FlxG.keys.pressed.SHIFT)
+					dummyArrow.y = FlxG.mouse.y;
 				else
-					dummyArrow.y = Math.floor(touch.y / GRID_SIZE) * GRID_SIZE;
-			}else{
+					dummyArrow.y = Math.floor(FlxG.mouse.y / GRID_SIZE) * GRID_SIZE;
+			}
+			else
+			{
 				dummyArrow.visible = false;
 			}
-		}
-
-		} else {
-
-		if (FlxG.mouse.justPressed)
-		{
-			if (FlxG.mouse.overlaps(curRenderedNotes))
-			{
-				curRenderedNotes.forEachAlive(function(note:Note)
-				{
-					if (FlxG.mouse.overlaps(note))
-					{
-						if (FlxG.keys.pressed.CONTROL)
-						{
-							selectNote(note);
-						}
-						else if (FlxG.keys.pressed.ALT)
-						{
-							selectNote(note);
-							curSelectedNote[3] = curNoteTypes[currentType];
-							updateGrid();
-						}
-						else
-						{
-							//trace('tryin to delete note...');
-							deleteNote(note);
-						}
-					}
-				});
-			}
-			else
-			{
-				if (FlxG.mouse.x > gridBG.x
-					&& FlxG.mouse.x < gridBG.x + gridBG.width
-					&& FlxG.mouse.y > gridBG.y
-					&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
-				{
-					FlxG.log.add('added note');
-					addNote();
-				}
-			}
-		}
-
-		if (FlxG.mouse.x > gridBG.x
-			&& FlxG.mouse.x < gridBG.x + gridBG.width
-			&& FlxG.mouse.y > gridBG.y
-			&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
-		{
-			dummyArrow.visible = true;
-			dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
-			if (FlxG.keys.pressed.SHIFT)
-				dummyArrow.y = FlxG.mouse.y;
-			else
-				dummyArrow.y = Math.floor(FlxG.mouse.y / GRID_SIZE) * GRID_SIZE;
-		}else{
-			dummyArrow.visible = false;
-		}
 		}
 
 		var blockInput:Bool = false;
@@ -2004,29 +2009,32 @@ class ChartingState extends MusicBeatState
 					resetSection();
 			}
 
-			if (!controls.mobileC) {
-			if (FlxG.mouse.wheel != 0)
+			if (!controls.mobileC)
 			{
-				FlxG.sound.music.pause();
-				if (!mouseQuant)
-					FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet*0.8);
-				else
+				if (FlxG.mouse.wheel != 0)
 				{
-					var time:Float = FlxG.sound.music.time;
-					var beat:Float = curDecBeat;
-					var snap:Float = quantization / 4;
-					var increase:Float = 1 / snap;
-					if (FlxG.mouse.wheel > 0)
+					FlxG.sound.music.pause();
+					if (!mouseQuant)
+						FlxG.sound.music.time -= (FlxG.mouse.wheel * Conductor.stepCrochet * 0.8);
+					else
 					{
-						var fuck:Float = CoolUtil.quantize(beat, snap) - increase;
-						FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
-					} else {
-						var fuck:Float = CoolUtil.quantize(beat, snap) + increase;
-						FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
+						var time:Float = FlxG.sound.music.time;
+						var beat:Float = curDecBeat;
+						var snap:Float = quantization / 4;
+						var increase:Float = 1 / snap;
+						if (FlxG.mouse.wheel > 0)
+						{
+							var fuck:Float = CoolUtil.quantize(beat, snap) - increase;
+							FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
+						}
+						else
+						{
+							var fuck:Float = CoolUtil.quantize(beat, snap) + increase;
+							FlxG.sound.music.time = Conductor.beatToSeconds(fuck);
+						}
 					}
+					pauseAndSetVocalsTime();
 				}
-				pauseAndSetVocalsTime();
-			}
 			}
 
 			//ARROW VORTEX SHIT NO DEADASS
@@ -3086,11 +3094,11 @@ class ChartingState extends MusicBeatState
 		//	undos.push(newsong);
 		var noteStrum = getStrumTime(dummyArrow.y * (getSectionBeats() / 4), false) + sectionStartTime();
 		var noteData = 0;
-		if (controls.mobileC) {
-		for (touch in FlxG.touches.list){noteData = Math.floor((touch.x - GRID_SIZE) / GRID_SIZE);}
-		} else {
-		noteData = Math.floor((FlxG.mouse.x - GRID_SIZE) / GRID_SIZE);
-		}
+		if (controls.mobileC)
+			for (touch in FlxG.touches.list)
+				noteData = Math.floor((touch.x - GRID_SIZE) / GRID_SIZE);
+		else
+			noteData = Math.floor((FlxG.mouse.x - GRID_SIZE) / GRID_SIZE);
 		var noteSus = 0;
 		var daAlt = false;
 		var daType = currentType;

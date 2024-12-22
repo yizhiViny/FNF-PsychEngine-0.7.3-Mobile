@@ -180,11 +180,10 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 						var funnyText:String;
 
-					if (controls.mobileC) {
-						funnyText = "Hold B to Cancel\nHold C to Delete";
-					} else {
-						funnyText = "Hold ESC to Cancel\nHold Backspace to Delete";
-					}
+						if (controls.mobileC)
+							funnyText = "Hold B to Cancel\nHold C to Delete";
+						else
+							funnyText = "Hold ESC to Cancel\nHold Backspace to Delete";
 						
 						bindingText2 = new Alphabet(FlxG.width / 2, 340, funnyText, true);
 						bindingText2.alignment = CENTERED;
