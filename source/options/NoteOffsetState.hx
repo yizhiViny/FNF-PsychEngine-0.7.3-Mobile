@@ -513,8 +513,6 @@ class NoteOffsetState extends MusicBeatState
 		timeTxt.text = 'Current offset: ' + Math.floor(barPercent) + ' ms';
 	}
 
-	final buttonAccept:String = (controls.mobileC) ? 'A' : (!controls.controllerMode) ? 'Accept' : 'Start';
-
 	function updateMode()
 	{
 		rating.visible = onComboMenu;
@@ -535,6 +533,8 @@ class NoteOffsetState extends MusicBeatState
 			FlxG.mouse.visible = !controls.controllerMode;
 			controllerPointer.visible = controls.controllerMode;
 		}
+
+		final buttonAccept:String = (controls.mobileC) ? 'A' : (!controls.controllerMode) ? 'Accept' : 'Start';
 
 		var str:String;
 		var str2:String;
