@@ -434,11 +434,15 @@ class NoteSplashDebugState extends MusicBeatState
 			else if(curAnim < 1) curAnim = maxAnims;
 
 			if (controls.mobileC)
+			{
 				curAnimText.text = 'Current Animation: $curAnim / $maxAnims\n(Press Top UP/DOWN to change)';
 				curFrameText.text = 'Force Frame Disabled\n(Press X/E to change)';
+			}
 			else
+			{
 				curAnimText.text = 'Current Animation: $curAnim / $maxAnims\n(Press W/S to change)';
 				curFrameText.text = 'Force Frame Disabled\n(Press Q/E to change)';
+			}
 
 			for (i in 0...maxNotes)
 			{
