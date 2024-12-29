@@ -526,7 +526,7 @@ class Paths
 	static public function modFolders(key:String) {
 		if(Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0) {
 			var fileToCheck:String = mods(Mods.currentModDirectory + '/' + key);
-			if(FileSystem.exists(fileToCheck)) {
+			if(FileSystem.exists(fileToCheck))
 				return fileToCheck;
 				#if linux
 				else
@@ -536,7 +536,6 @@ class Paths
 						return newPath;
 				}
 				#end
-			}
 		}
 
 		for(mod in Mods.getGlobalMods()){
