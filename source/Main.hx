@@ -16,16 +16,31 @@ import lime.app.Application;
 import states.TitleState;
 import mobile.backend.MobileScaleMode;
 import openfl.events.KeyboardEvent;
+#if linux
+import lime.graphics.Image;
+#end
 #if COPYSTATE_ALLOWED
 import states.CopyState;
 #end
 
-#if linux
-import lime.graphics.Image;
-
+#if (linux && !debug)
 @:cppInclude('./external/gamemode_client.h')
 @:cppFileCode('
 	#define GAMEMODE_AUTO
+')
+#end
+#if windows
+@:buildXml('
+<target id="haxe">
+	<lib name="wininet.lib" if="windows" />
+	<lib name="dwmapi.lib" if="windows" />
+</target>
+')
+@:cppFileCode('
+#include <windows.h>
+#include <winuser.h>
+#pragma comment(lib, "Shell32.lib")
+extern "C" HRESULT WINAPI SetCurrentProcessExplicitAppUserModelID(PCWSTR AppID);
 ')
 #end
 
@@ -72,12 +87,10 @@ class Main extends Sprite
 		backend.CrashHandler.init();
 
 		#if windows
-		@:functionCode("
-		#include <windows.h>
-		#include <winuser.h>
-		setProcessDPIAware() // allows for more crisp visuals
-		DisableProcessWindowsGhosting() // lets you move the window and such if it's not responding
-		")
+		// DPI Scaling fix for windows 
+		// this shouldn't be needed for other systems
+		// Credit to YoshiCrafter29 for finding this function
+		untyped __cpp__("SetProcessDPIAware();");
 		#end
 
 		if (stage != null)
