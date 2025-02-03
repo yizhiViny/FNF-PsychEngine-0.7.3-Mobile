@@ -6,6 +6,11 @@ import flixel.effects.FlxFlicker;
 import lime.app.Application;
 import states.editors.MasterEditorMenu;
 import options.OptionsState;
+import backend.WeekData;
+import backend.Difficulty;
+import backend.Song;
+
+using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
@@ -160,7 +165,19 @@ class MainMenuState extends MusicBeatState
 						switch (optionShit[curSelected])
 						{
 							case 'story_mode':
-								MusicBeatState.switchState(new StoryMenuState());
+								//不知道能不能用，无所谓了，出问题再说 --你爹
+								@:access(backend.WeekData)
+								var weekData:Dynamic = WeekData.getWeekFile(Paths.json("weeks/week1"));
+
+								var diffic:String = Difficulty.getFilePath(curDifficulty);
+								
+								PlayState.storyPlaylist = weekData;
+								PlayState.isStoryMode = true;
+								//最大难度锁定
+								final VinyIsBigSB = weekData.difficulties.split(",")[weekData.difficulties.split(",").length - 1].trim()；
+								PlayState.storyDifficulty = VinyIsBigSB;
+								PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + (Difficulty.getFilePath(VinyIsBigSB) != null ? Difficulty.getFilePath(VinyIsBitSB) : ""), PlayState.storyPlaylist[0].toLowerCase());
+								LoadingState.loadAndSwitchState(new PlayState());
 							case 'freeplay':
 								MusicBeatState.switchState(new FreeplayState());
 
